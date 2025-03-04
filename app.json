@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "VideoEdit",
-    "slug": "VideoEdit",
+    "name": "Video Dairy",
+    "slug": "video-dairy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
