@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+    :root{
+        --color-background : #FFFFFF;
+        --color-text : #000000;
+        --color-secondary-background : #FFFFFF;
+    }
+    :root[class~="dark"] {
+        --color-background : #000000;
+        --color-text : #FFFFFF;
+        --color-secondary-background : #1A1A1A;
+    }
+}
