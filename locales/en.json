@@ -4,5 +4,6 @@
     "language" : "Language",
     "color_theme" : "Color Theme",
     "dark_theme" : "Dark",
-    "light_theme" : "Light"
+    "light_theme" : "Light",
+    "new_diary_desc" : "Uplaod a video to start a new diary."
 }

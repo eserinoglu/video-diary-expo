@@ -57,7 +57,7 @@ export default function SettingsSheet({
   // Animated container style for background overlay
   const animatedContainerStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: withTiming(isVisible ? "#00000030" : "transparent"),
+      backgroundColor: withTiming(isVisible ? "#00000050" : "transparent"),
       pointerEvents: isVisible ? "auto" : "none",
       position: "absolute",
       top: 0,
@@ -215,6 +215,7 @@ function LanguageSelectionScreen({
     Haptics.selectionAsync();
     await changeLanguage(langCode);
     i18n.reloadResources(langCode);
+    dismiss();
   };
 
   return (
@@ -238,6 +239,7 @@ function LanguageSelectionScreen({
       </TouchableOpacity>
       {/* Language List */}
       <FlatList
+        alwaysBounceVertical={false}
         data={languages}
         className="mt-6"
         contentContainerClassName="gap-2"
@@ -247,11 +249,14 @@ function LanguageSelectionScreen({
           return (
             <TouchableOpacity
               onPress={() => changeLang(item.code)}
-              className="w-full bg-neutral-100 dark:bg-neutral-900 p-5 rounded-3xl flex flex-row items-center justify-between"
+              className="w-full bg-neutral-100 dark:bg-neutral-900 p-6 rounded-3xl flex flex-row items-center justify-between"
             >
-              <Text className="text-xl font-medium text-text opacity-70">
-                {item.name}
-              </Text>
+              <View className="flex flex-row items-center gap-2">
+                <Text className="text-xl">{item.flag}</Text>
+                <Text className="text-xl font-medium text-text">
+                  {item.name}
+                </Text>
+              </View>
               {isSelected && (
                 <Feather name="check-circle" size={24} color="#12A8F9" />
               )}

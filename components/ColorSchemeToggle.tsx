@@ -26,7 +26,7 @@ export default function ColorThemeToggle() {
   // Animated styling options
   const animatedToggleStyle = useAnimatedStyle(() => {
     return {
-      left: withTiming(isDarkMode ? "52%" : 4),
+      left: withTiming(isDarkMode ? "52%" : 3),
     };
   });
   const animatedMoonIconStyle = useAnimatedStyle(() => {
@@ -80,12 +80,12 @@ export default function ColorThemeToggle() {
             <TouchableOpacity
               onPress={() => toggleSelection(theme.value as "light" | "dark")}
               key={theme.label}
-              className={`items-center px-4 py-2 rounded-3xl z-20`}
+              className={`items-center justify-center flex flex-row w-[80px] px-4 py-2 rounded-3xl z-20`}
             >
               <Text
                 className={`${
                   isSelected ? "text-white" : "text-text opacity-50"
-                } font-medium`}
+                } font-medium self-center`}
               >
                 {i18n.t(theme.label)}
               </Text>
