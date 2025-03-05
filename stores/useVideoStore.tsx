@@ -1,11 +1,16 @@
+import { ImagePickerAsset } from "expo-image-picker";
 import { create } from "zustand";
 
 interface VideoStore {
-  video: File | null;
-  setVideo: (video?: File) => void;
+  video: ImagePickerAsset | null;
+  setVideo: (video: ImagePickerAsset | null) => Promise<void>;
+  isUploading : boolean;
+  setIsUploading : (isUploading : boolean) => void;
 }
 
 export const useVideoStore = create<VideoStore>((set, get) => ({
   video: null,
-  setVideo: (video) => set({ video }),
+  isUploading: false,
+  setIsUploading: (isUploading) => set({ isUploading }),
+  setVideo: async (video?) => set({ video: video ? video : null }),
 }));

@@ -57,30 +57,42 @@ export default function Index() {
   );
 }
 
-import * as DocumentPicker from "expo-document-picker"
+import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useVideoStore } from "@/stores/useVideoStore";
 function UploadVideoButton() {
   const router = useRouter();
   const isDarkMode = useColorTheme().colorScheme === "dark";
 
-  const {setVideo} = useVideoStore()
+  const { setVideo, setIsUploading } = useVideoStore();
 
   const uploadVideo = async () => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type : "video/*",
-      copyToCacheDirectory: true,
-    })
+    setIsUploading(true);
+    router.push("/video-edit");
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["videos"],
+      allowsEditing: false,
+      quality: 1,
+    });
+
+    if (result.canceled) {
+      setVideo(null);
+      router.back();
+      setIsUploading(false);
+      return;
+    }
 
     if (!result.canceled) {
-      setVideo(result.assets[0].file)
+      setVideo(result.assets[0]);
     }
-  }
+    setIsUploading(false);
+  };
 
   return (
     <TouchableOpacity
-    onPress={() => router.push("/video-edit")}
-    className="w-full rounded-3xl border border-neutral-200 dark:border-neutral-800 flex flex-row items-center gap-3 justify-start bg-neutral-100 dark:bg-neutral-900 p-6 mt-6">
+      onPress={uploadVideo}
+      className="w-full rounded-3xl border border-neutral-200 dark:border-neutral-800 flex flex-row items-center gap-3 justify-start bg-neutral-100 dark:bg-neutral-900 p-6 mt-6"
+    >
       <View className="-rotate-12">
         <FontAwesome6
           name="photo-film"
@@ -95,4 +107,3 @@ function UploadVideoButton() {
     </TouchableOpacity>
   );
 }
-
