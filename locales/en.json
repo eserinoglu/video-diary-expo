@@ -1,7 +1,8 @@
 {
     "settings" : "Settings",
+    "select_language" : "Select a language",
+    "language" : "Language",
     "color_theme" : "Color Theme",
-    "theme_light" : "Light",
-    "theme_dark" : "Dark",
-    "theme_system" : "System"
+    "dark_theme" : "Dark",
+    "light_theme" : "Light"
 }

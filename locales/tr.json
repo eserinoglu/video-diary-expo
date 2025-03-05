@@ -1,6 +1,8 @@
 {
     "settings" : "Ayarlar",
+    "select_language" : "Bir dil seçin",
+    "language" : "Dil",
     "color_theme" : "Renk Teması",
-    "theme_light" : "Açık",
-    "theme_dark" : "Koyu"
+    "dark_theme" : "Koyu",
+    "light_theme" : "Açık"
 }

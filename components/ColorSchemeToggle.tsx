@@ -6,16 +6,16 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { View, Text, TouchableOpacity } from "react-native";
-import i18n from "@/locales/i18n"
 import { Feather } from "@expo/vector-icons";
+import i18n from "@/locales/i18n";
 
 export default function ColorThemeToggle() {
   const themes = [
-    { label: "theme_light", value: "light" },
-    { label: "theme_dark", value: "dark" },
+    { label: "light_theme", value: "light" },
+    { label: "dark_theme", value: "dark" },
   ];
-  const { setTheme, colorScheme } = useColorTheme();
 
+  const { setTheme, colorScheme } = useColorTheme();
   const isDarkMode = colorScheme === "dark";
 
   const toggleSelection = (theme: "light" | "dark") => {
@@ -23,6 +23,7 @@ export default function ColorThemeToggle() {
     setTheme(theme);
   };
 
+  // Animated styling options
   const animatedToggleStyle = useAnimatedStyle(() => {
     return {
       left: withTiming(isDarkMode ? "52%" : 4),
@@ -40,15 +41,16 @@ export default function ColorThemeToggle() {
   });
 
   return (
-    <View className="w-full flex flex-row items-center justify-between mt-6">
+    <View className="w-full flex flex-row items-center justify-between">
       {/* Label and Icon */}
-      <View className="flex flex-row items-center gap-2">
-        <View className="flex flex-col h-[24px] overflow-hidden gap-0">
+      <View className="flex flex-row items-center gap-3">
+        <View className="flex flex-col h-[24px] w-[24px] overflow-hidden gap-0">
           <Animated.View style={[animatedMoonIconStyle]}>
             <Feather
               name={"moon"}
               size={24}
               color={isDarkMode ? "white" : "black"}
+              style={{width: 24, height: 24}}
             />
           </Animated.View>
           <Animated.View style={[animatedSunIconStyle]}>
@@ -56,6 +58,7 @@ export default function ColorThemeToggle() {
               name={"sun"}
               size={24}
               color={isDarkMode ? "white" : "black"}
+              style={{width: 24, height: 24}}
             />
           </Animated.View>
         </View>
