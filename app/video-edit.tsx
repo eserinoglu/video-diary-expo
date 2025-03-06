@@ -1,162 +1,270 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React, { useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { useVideoStore } from "@/stores/useVideoStore";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
 import { Feather } from "@expo/vector-icons";
-import * as FileSystem from "expo-file-system";
-import { FFmpegKit } from "ffmpeg-kit-react-native";
+import { Image } from "expo-image";
+import i18n from "@/locales/i18n";
+import { useRouter } from "expo-router";
+
 export default function VideoEdit() {
-  const { insets } = useScreenDimensions();
+  const { isUploading, video, setVideo } = useVideoStore();
+  const { insets, height } = useScreenDimensions();
+  const router = useRouter();
 
-  const { video, isUploading } = useVideoStore();
-
-  const [isPlaying, setIsPlaying] = React.useState(false);
-
-  const videoSource = video?.uri;
-  const player = useVideoPlayer(videoSource!, (player) => {
-    player.loop = true;
-  });
+  const goBack = () => {
+    setVideo(null);
+    router.back();
+  };
 
   return (
     <View
-      style={{ paddingTop: insets.top }}
-      className="flex-1 items-center flex-col justify-start px-4"
+      style={{ paddingTop: insets.top, height: height }}
+      className="flex-1 bg-background px-4 flex flex-col items-center gap-4"
     >
-      {isUploading && <Text className="text-text">Loading</Text>}
-      <View
-        style={{
-          width: 300,
-          height: 500,
-        }}
+      <TouchableOpacity
+        onPress={goBack}
+        className="w-full flex flex-row items-center justify-start gap-2"
       >
-        <TouchableOpacity
-          className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center z-10"
-          onPress={() => {
-            if (isPlaying) {
-              player.pause();
-              setIsPlaying(false);
-            } else {
-              player.play();
-              setIsPlaying(true);
-            }
-          }}
-        >
-          <View className="w-20 rounded-full aspect-square flex items-center justify-center bg-neutral-200 dark:bg-neutral-700">
-            <Feather
-              color={"white"}
-              name={isPlaying ? "pause" : "play"}
-              size={36}
-            />
-          </View>
-        </TouchableOpacity>
-        {video && (
-          <View className="w-full h-full flex flex-col items-center">
-            <VideoView
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-              player={player}
-              contentFit="contain"
-              allowsFullscreen={false}
-              allowsPictureInPicture={false}
-              nativeControls={false}
-            />
-          </View>
-        )}
-      </View>
-      <VideoSlider />
+        <Text className="font-medium text-text">{i18n.t("cancel")}</Text>
+      </TouchableOpacity>
+      {isUploading && <ActivityIndicator className="text-text" />}
+      {video && !isUploading && (
+        <View className="w-full flex flex-col flex-1 gap-6">
+          <VideoDisplay />
+          <TimelineView />
+          <ClipDurationSelector />
+          <NextButton />
+        </View>
+      )}
     </View>
   );
 }
 
-function VideoSlider() {
-  const trimmingDurationOptions = [5, 10];
-  const [selectedTrimmingDuration, setSelectedTrimmingDuration] =
-    React.useState(trimmingDurationOptions[0]);
+function VideoDisplay() {
+  const {
+    video,
+    player,
+    setPlayer,
+    generateThumbnails,
+    startTime,
+    selectedTrimmingDuration,
+  } = useVideoStore();
 
-  const { video } = useVideoStore();
+  const newPlayer = video ? useVideoPlayer(video.uri) : null;
 
-  const [thumbnails, setThumbnails] = React.useState<string[]>([]);
-  async function generateThumbnails() {
-    if (!video?.uri) return [];
-
-    const thumbnails: string[] = [];
-    const outputDir = FileSystem.cacheDirectory + "thumbs/";
-
-    // Çıkış klasörünü oluştur
-    await FileSystem.makeDirectoryAsync(outputDir, {
-      intermediates: true,
-    }).catch(() => {});
-
-    // 10 farklı frame için thumbnail alalım
-    for (let i = 0; i < 10; i++) {
-      const time = i * 2; // 2 saniyede bir frame al
-      const outputPath = `${outputDir}thumb_${i}.jpg`;
-
-      // FFmpeg komutunu çalıştır
-      const command = `-y -i "${video.uri}" -ss ${time} -vframes 1 -q:v 5 -vf "scale=160:-1:flags=lanczos" -pix_fmt yuv420p -color_range 1 "${outputPath}"`;
-      await FFmpegKit.execute(command);
-
-      thumbnails.push(outputPath);
-    }
-
-    return thumbnails;
-  }
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    async function fetchThumbnails() {
-      const outputDir = FileSystem.cacheDirectory + "thumbs/";
-      if (video?.uri) {
-        await FileSystem.deleteAsync(outputDir, { idempotent: true });
-        const generatedThumbs = await generateThumbnails();
-        if (generatedThumbs) {
-          setThumbnails(generatedThumbs);
-        }
-      }
+    if (newPlayer) {
+      setPlayer(newPlayer);
+      generateThumbnails();
+    }
+  }, [video, player]);
+
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handlePlayPause = (action: "play" | "pause") => {
+    if (!player) return;
+
+    player.addListener("playingChange", (event) => {
+      setIsPlaying(event.isPlaying);
+    });
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
 
-    fetchThumbnails();
-  }, [video]);
+    if (action === "play") {
+      player.currentTime = startTime;
+      player.play();
+
+      setIsPlaying(true);
+
+      timeoutRef.current = setTimeout(() => {
+        setIsPlaying(false);
+        player.pause();
+      }, selectedTrimmingDuration * 1000);
+    } else {
+      player.pause();
+      setIsPlaying(false);
+    }
+  };
 
   return (
-    <View className="flex flex-col gap-4 mt-10 items-start w-full">
-      <View className="w-full flex flex-row items-center">
+    <View className="w-full h-[55%] flex items-center justify-center overflow-hidden">
+      {player && (
+        <>
+          <TouchableOpacity
+            onPress={() => handlePlayPause(isPlaying ? "pause" : "play")}
+            className="absolute w-full h-full top-0 right-0 flex items-center justify-center z-10"
+          >
+            <View className="w-16 aspect-square rounded-full bg-white/60 dark:bg-black/60 flex items-center justify-center">
+              <Feather
+                name={isPlaying ? "pause" : "play"}
+                size={32}
+                color="white"
+              />
+            </View>
+          </TouchableOpacity>
+          <VideoView
+            player={player}
+            style={{ width: "100%", height: "100%" }}
+            nativeControls={false}
+          />
+        </>
+      )}
+    </View>
+  );
+}
+
+function TimelineView() {
+  // Get the necessary values from the store
+  const {
+    thumbnails,
+    pixelForEachSecond,
+    videoDuration,
+    selectedTrimmingDuration,
+    player,
+    setStartTime,
+    startTime,
+    endTime,
+    formatTime,
+  } = useVideoStore();
+
+  // UI calculations
+  const screenWidth = useScreenDimensions().width - 32; // Width of the screen minus the padding
+  const scrollWidth = (videoDuration / 1000) * pixelForEachSecond; // Width of the scroll view
+  const thumbnailWidth =
+    scrollWidth / Math.min(Math.floor(videoDuration / 1000), 20); // Width of each thumbnail
+  const markerGap = selectedTrimmingDuration * pixelForEachSecond; // Gap between the markers
+  const overlayWidth = screenWidth - markerGap; // Width of the overlay
+
+  // Handle scrolling
+  const handleScroll = (event: any) => {
+    if (!player) return;
+    const scrollX = event.nativeEvent.contentOffset.x;
+    const currentTimeInSeconds =
+      (scrollX / scrollWidth) * (videoDuration / 1000);
+    setStartTime(currentTimeInSeconds);
+    player.currentTime = currentTimeInSeconds;
+    if (player.playing) {
+      player.pause();
+    }
+  };
+
+  const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+  return (
+    <View className="w-full flex flex-col gap-4">
+      {/* Video start and end times text */}
+      <View className="flex flex-row items-center w-full justify-start">
+        <Text className="text-text font-medium tracking-tight opacity-50">
+          {formatTime(startTime)} - {formatTime(endTime)}
+        </Text>
+      </View>
+      {/* Timeline and markers */}
+      <View className="flex w-full h-[60px] rounded-xl overflow-hidden">
+        <View
+          style={{ gap: markerGap }}
+          className="flex flex-row items-center absolute left-0 h-full w-full z-20 pointer-events-none"
+        >
+          <View className="w-[3px] bg-tint h-full rounded-full"></View>
+          <View className="w-[3px] bg-tint h-full rounded-full"></View>
+        </View>
+
+        <View
+          style={{ width: overlayWidth }}
+          className="h-full bg-white/70 dark:bg-black/70 absolute right-0 z-10 pointer-events-none"
+        ></View>
+
+        <ScrollView
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          bounces={false}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            width: scrollWidth + overlayWidth,
+          }}
+          horizontal
+        >
+          {thumbnails.map((thumbnail, index) => (
+            <Image
+              key={index}
+              source={thumbnail}
+              style={{ width: thumbnailWidth, height: "100%" }}
+              placeholder={{ blurhash }}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    </View>
+  );
+}
+
+function ClipDurationSelector() {
+  const {
+    trimmingDurationOptions,
+    selectedTrimmingDuration,
+    setSelectedTrimmingDuration,
+  } = useVideoStore();
+  return (
+    <View className="flex flex-col gap-3 items-start">
+      <Text className="text-text opacity-50">{i18n.t("clip_duration")}</Text>
+      <View className="flex flex-row items-center w-full gap-2">
         {trimmingDurationOptions.map((duration) => {
           const isSelected = selectedTrimmingDuration === duration;
           return (
             <TouchableOpacity
-              className={`px-5 py-1 rounded-full ${
-                isSelected ? "bg-tint" : "bg-transparent"
+              onPress={() => setSelectedTrimmingDuration(duration)}
+              className={`px-6 py-2 rounded-full ${
+                isSelected ? "bg-tint" : "bg-neutral-200 dark:bg-neutral-800"
               }`}
               key={duration}
-              onPress={() => setSelectedTrimmingDuration(duration)}
             >
               <Text
-                className={`font-medium text-lg ${
-                  isSelected ? "text-white" : "text-text"
+                className={`font-medium ${
+                  isSelected ? "text-white" : "text-text opacity-40"
                 }`}
               >
-                {duration}s
+                {i18n.t("second", { second: duration })}
               </Text>
             </TouchableOpacity>
           );
         })}
       </View>
-      <ScrollView
-        className="w-full h-[80px]"
-        horizontal
-        contentContainerClassName="gap-1"
-      >
-        {thumbnails.map((thumbnail, index) => (
-          <Image
-            key={index}
-            source={{ uri: thumbnail }}
-            style={{ width: 45, height: 80 }}
-          />
-        ))}
-      </ScrollView>
     </View>
+  );
+}
+
+function NextButton() {
+  const insets = useScreenDimensions().insets;
+  const router = useRouter();
+
+  const { player, startTime } = useVideoStore();
+
+  const navigate = () => {
+    if (!player) return;
+    player.pause()
+    player.currentTime = startTime
+    router.push("/video-add");
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={navigate}
+      style={{ bottom: insets.bottom }}
+      className="w-full rounded-3xl bg-tint h-[50px] flex items-center justify-center mt-auto"
+    >
+      <Text className="font-semibold text-lg text-white">{i18n.t("next")}</Text>
+    </TouchableOpacity>
   );
 }

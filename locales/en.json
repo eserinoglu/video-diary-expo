@@ -5,5 +5,20 @@
     "color_theme" : "Color Theme",
     "dark_theme" : "Dark",
     "light_theme" : "Light",
-    "new_diary_desc" : "Uplaod a video to start a new diary."
+    "new_diary_desc" : "Uplaod a video to start a new diary.",
+    "clip_duration" : "Clip Duration",
+    "next" : "Next",
+    "second" : "{{second}} sec" ,
+    "cancel" : "Cancel",
+    "details" : "Clip Details",
+    "back" : "Back",
+    "title" : "Title",
+    "description" : "Description",
+    "save" : "Save",
+    "awesome_clip" : "Awesome Clip",
+    "description_placeholder" : "Write a description",
+    "min_title_warning" : "Title must be at least 3 characters long.",
+    "max_title_warning" : "Title must be at most 20 characters long.",
+    "min_description_warning" : "Description must be at least 10 characters long.",
+    "max_description_warning" : "Description must be at most 100 characters long."
 }

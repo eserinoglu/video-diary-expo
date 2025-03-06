@@ -4,5 +4,6 @@
     "language" : "Dil",
     "color_theme" : "Renk Teması",
     "dark_theme" : "Koyu",
-    "light_theme" : "Açık"
+    "light_theme" : "Açık",
+    "trim_duration" : "Kırpma Süresi"
 }
