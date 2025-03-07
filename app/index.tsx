@@ -3,7 +3,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
 import SettingsSheet from "@/components/SettingsSheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
@@ -13,7 +13,6 @@ export default function Index() {
   const isDarkMode = useColorScheme().colorScheme === "dark";
   const { insets, horizontalPadding } = useScreenDimensions();
   const topPadding = insets.top + 20;
-  const {croppedVideos} = useVideoStore()
 
   // Settings sheet open/close state
   const [isSettingsSheetVisible, setIsSettingsSheetVisible] = useState(false);
@@ -21,6 +20,15 @@ export default function Index() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsSettingsSheetVisible(true);
   };
+
+  const [videos, setVideos] = useState<VideoDiary[]>([]);
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const videos = await getAllVideos();
+      setVideos(videos);
+    };
+    fetchVideos();
+  }, []);
 
   return (
     <View className="flex-1">
@@ -53,10 +61,9 @@ export default function Index() {
         </View>
         {/* Upload video button */}
         <UploadVideoButton />
-        <View className="flex flex-col gap-4 mt-10">
-          {croppedVideos.map((video, index) => (
-            <Text key={index} >{video}</Text>
-          ))}
+
+        <View className="flex flex-col items-start gap-3">
+          {videos.map((video) => (<Text key={video.id}>{video.videoUri}</Text>))}
         </View>
       </ScrollView>
     </View>
@@ -66,6 +73,7 @@ export default function Index() {
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useVideoStore } from "@/stores/useVideoStore";
+import { getAllVideos, VideoDiary } from "@/services/databaseService";
 
 function UploadVideoButton() {
   const router = useRouter();

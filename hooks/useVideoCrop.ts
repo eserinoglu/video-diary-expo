@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cropVideo } from "@/services/videoService";
-import { useVideoStore } from "@/stores/useVideoStore";
 import * as FileSystem from "expo-file-system";
+import { insertVideo, VideoDiary } from "@/services/databaseService";
 
 export const useVideoCrop = () => {
-  const { addCroppedVideo } = useVideoStore();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -37,14 +36,15 @@ export const useVideoCrop = () => {
       );
 
       if (result.success) {
-        const newVideo = {
+        const newVideo: VideoDiary = {
           id: Date.now().toString(),
           title,
           description,
-          uri: result.outputPath,
+          videoUri: result.outputPath,
           createdAt: Date.now().toString(),
         };
-        addCroppedVideo(newVideo.uri);
+
+        await insertVideo(newVideo);
       }
 
       return result;
