@@ -7,7 +7,6 @@ export const initDatabase = async () => {
     await db.execAsync(
       "CREATE TABLE IF NOT EXISTS videos (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, videoUri TEXT NOT NULL, createdAt TEXT NOT NULL)"
     );
-    console.log("Database initialized successfully");
   } catch (error) {
     console.error("Database initialization error:", error);
   }

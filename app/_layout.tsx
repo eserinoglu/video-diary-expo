@@ -4,21 +4,39 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Text } from "react-native";
 import { loadSavedLanguage } from "@/locales/i18n";
 ("@/locales/i18n");
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { initDatabase } from "@/services/databaseService";
+import * as SplashScreen from "expo-splash-screen";
 
 (Text as any).defaultProps = {
   allowFontScaling: false,
 };
 
+const initializeApp = async () => {
+  await Promise.all([loadSavedLanguage(), initDatabase()]);
+};
+
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
+  const [isAppReady, setIsAppReady] = useState(false);
+
   useEffect(() => {
-    const loadLang = async () => {
-      await loadSavedLanguage();
+    const init = async () => {
+      await initializeApp()
+      setIsAppReady(true);
     };
-    loadLang();
+
+    init();
   }, []);
+
+  useEffect(() => {
+    if (isAppReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [isAppReady]);
 
   const queryClient = new QueryClient();
 
