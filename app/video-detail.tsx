@@ -8,10 +8,28 @@ import { Feather } from "@expo/vector-icons";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
 import { format } from "date-fns";
+import VideoEditSheet from "@/components/VideoDetail/VideoEditSheet";
+import { useVideoEdit } from "@/stores/useVideoEdit";
+import { VideoDiary } from "@/types/VideoDiary";
 
 export default function VideoDetail() {
   const params = useLocalSearchParams();
   const { id, title, description, uri, width, height, createdAt } = params;
+
+  const { setSelectedVideo } = useVideoEdit();
+  const handleSelectedVideo = () => {
+    const video: VideoDiary = {
+      id: id as string,
+      title: title as string,
+      description: description as string,
+      videoUri: uri as string,
+      width: Number(width),
+      height: Number(height),
+      createdAt: createdAt as string,
+    };
+
+    setSelectedVideo(video);
+  };
 
   const router = useRouter();
 
@@ -111,22 +129,24 @@ export default function VideoDetail() {
       {/* Video actions */}
       <View className="flex flex-row items-center gap-2 w-full absolute bottom-10 left-4 right-4">
         <TouchableOpacity className="flex-1 bg-tint rounded-3xl h-[50px] flex flex-row items-center justify-center gap-2">
-          <Feather
-            name="download"
-            size={20}
-            color={"white"}
-          />
-          <Text className="text-white font-semibold">{i18n.t("save_gallery")}</Text>
+          <Feather name="download" size={20} color={"white"} />
+          <Text className="text-white font-semibold">
+            {i18n.t("save_gallery")}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity className="w-1/5 bg-neutral-200 dark:bg-neutral-800 rounded-3xl h-[50px] flex flex-row items-center justify-center gap-2">
+        <TouchableOpacity
+          onPress={handleSelectedVideo}
+          className="w-1/5 bg-neutral-200 dark:bg-neutral-800 rounded-3xl h-[50px] flex flex-row items-center justify-center gap-2"
+        >
           <Feather
             name="edit"
             size={20}
             color={isDarkMode ? "white" : "black"}
-            style={{opacity : 0.5}}
+            style={{ opacity: 0.5 }}
           />
         </TouchableOpacity>
       </View>
+      <VideoEditSheet />
     </View>
   );
 }

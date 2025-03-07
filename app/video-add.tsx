@@ -51,27 +51,15 @@ function NavigationHeader() {
 }
 
 // Form section
-import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(3, { message: "min_title_warning" })
-    .max(20, { message: "max_title_warning" }),
-  description: z
-    .string()
-    .min(10, { message: "min_description_warning" })
-    .max(100, { message: "max_description_warning" }),
-});
+const formSchema = FormSchema;
 
 import { useVideoCrop } from "@/hooks/useVideoCrop";
 import { useVideoStore } from "@/stores/useVideoStore";
+import { FormSchema } from "@/types/FormSchema";
+import TextField from "@/components/Shared/TextField";
 function FormSection() {
   const {
     control,
@@ -98,7 +86,7 @@ function FormSection() {
       trimDuration: selectedTrimmingDuration,
       title: getValues("title"),
       description: getValues("description"),
-      width : video.width,
+      width: video.width,
       height: video.height,
     });
   };
@@ -106,57 +94,6 @@ function FormSection() {
   // Submit function
   const onSubmit = () => {
     handleVideoCrop();
-  };
-
-  // Error text component
-  const errorText = (text: string | undefined) => {
-    const errorText = text;
-    const animatedErrorBoxStyle = useAnimatedStyle(() => {
-      return {
-        opacity: withTiming(errorText ? 1 : 0),
-        transform: [{ translateY: withTiming(errorText ? 0 : -10) }],
-      };
-    });
-    return (
-      <Animated.Text
-        style={[animatedErrorBoxStyle]}
-        className="text-red-500 text-sm"
-      >
-        {i18n.t(errorText || "")}
-      </Animated.Text>
-    );
-  };
-
-  // Textfield component
-  const textField = (
-    name: "title" | "description",
-    placeholder: string,
-    isDescription: boolean = false
-  ) => {
-    return (
-      <View className="w-full flex-flex-col gap-2">
-        <Text className="text-xl font-medium opacity-50 text-text">
-          {i18n.t(name)}
-        </Text>
-        <Controller
-          control={control}
-          render={({ field: { onChange, value, onBlur } }) => (
-            <TextInput
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-              placeholder={i18n.t(placeholder)}
-              className="bg-neutral-100 dark:bg-neutral-900 rounded-2xl p-3 text-xl text-text flex items-start justify-start"
-              style={{ height: isDescription ? 100 : 50 }}
-              multiline={isDescription}
-              numberOfLines={isDescription ? 5 : 1}
-            />
-          )}
-          name={name === "title" ? "title" : "description"}
-        />
-        {errorText(errors[name]?.message)}
-      </View>
-    );
   };
 
   return (
@@ -170,8 +107,16 @@ function FormSection() {
         behavior="padding"
         className="flex-col flex-1 gap-4"
       >
-        {textField("title", "awesome_clip")}
-        {textField("description", "description_placeholder", true)}
+        <TextField
+          name="title"
+          placeholder="awesome_clip"
+          control={control}
+        />
+        <TextField
+          name="description"
+          placeholder="description_placeholder"
+          control={control}
+        />
         <TouchableOpacity
           disabled={!isValid}
           onPress={handleSubmit(onSubmit)}

@@ -22,5 +22,6 @@
     "min_description_warning" : "Description must be at least 10 characters long.",
     "max_description_warning" : "Description must be at most 100 characters long.",
     "clip_detail" : "Clip Detail",
-    "save_gallery" : "Save to Gallery"
+    "save_gallery" : "Save to Gallery",
+    "edit_video" : "Edit Video"
 }

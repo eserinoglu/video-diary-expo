@@ -8,6 +8,7 @@ import { Image } from "expo-image";
 import i18n from "@/locales/i18n";
 import { useRouter } from "expo-router";
 import { BlurView } from "expo-blur";
+import { useColorTheme } from "@/utils/useColorTheme";
 
 export default function VideoEdit() {
   const { video, setVideo } = useVideoStore();
@@ -55,6 +56,8 @@ function VideoDisplay() {
   const newPlayer = video ? useVideoPlayer(video.uri) : null;
 
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const isDarkMode = useColorTheme().colorScheme === "dark";
 
   useEffect(() => {
     if (newPlayer) {
@@ -110,14 +113,31 @@ function VideoDisplay() {
           </TouchableOpacity>
           <VideoView
             player={player}
-            style={{ width: "100%", height: "100%", position: "absolute", top: 0, right: 0 }}
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              top: 0,
+              right: 0,
+            }}
             nativeControls={false}
             contentFit="cover"
           />
-          <BlurView intensity={60} tint="dark" style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0, zIndex: 2 }} />
+          <BlurView
+            intensity={60}
+            tint={isDarkMode ? "dark" : "light"}
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              zIndex: 2,
+            }}
+          />
           <VideoView
             player={player}
-            style={{ width: "100%", height: "100%" , zIndex: 3 }}
+            style={{ width: "100%", height: "100%", zIndex: 3 }}
             nativeControls={false}
           />
         </>
