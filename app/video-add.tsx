@@ -98,6 +98,8 @@ function FormSection() {
       trimDuration: selectedTrimmingDuration,
       title: getValues("title"),
       description: getValues("description"),
+      width : video.width,
+      height: video.height,
     });
   };
 

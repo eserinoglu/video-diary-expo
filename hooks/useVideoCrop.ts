@@ -14,12 +14,16 @@ export const useVideoCrop = () => {
       trimDuration,
       title,
       description,
+      width,
+      height,
     }: {
       videoUri: string;
       startTime: number;
       trimDuration: number;
       title: string;
       description: string;
+      width: number;
+      height: number;
     }) => {
       const outputFileName = `${title.toLowerCase()}-${Date.now().toString()}.mp4`;
       const outputPath = `${FileSystem.documentDirectory}videos/${outputFileName}`;
@@ -43,6 +47,8 @@ export const useVideoCrop = () => {
           description,
           videoUri: result.outputPath,
           createdAt: Date.now().toString(),
+          width,
+          height
         };
 
         await insertVideo(newVideo);

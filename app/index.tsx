@@ -1,9 +1,15 @@
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
 import SettingsSheet from "@/components/SettingsSheet";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
@@ -33,6 +39,7 @@ export default function Index() {
 
   return (
     <View className="flex-1">
+      <LoadingOverlay />
       {/* Settings Sheet */}
       <SettingsSheet
         isVisible={isSettingsSheetVisible}
@@ -78,6 +85,10 @@ import { useRouter } from "expo-router";
 import { useVideoStore } from "@/stores/useVideoStore";
 import { getAllVideos } from "@/services/databaseService";
 import VideoListRow from "@/components/Home/VideoListRow";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
 function UploadVideoButton() {
   const router = useRouter();
@@ -87,7 +98,6 @@ function UploadVideoButton() {
 
   const uploadVideo = async () => {
     setIsUploading(true);
-    router.push("/video-edit");
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["videos"],
       allowsEditing: false,
@@ -96,7 +106,6 @@ function UploadVideoButton() {
 
     if (result.canceled) {
       setVideo(null);
-      router.back();
       setIsUploading(false);
       return;
     }
@@ -105,6 +114,7 @@ function UploadVideoButton() {
       setVideo(result.assets[0]);
     }
     setIsUploading(false);
+    router.push("/video-edit");
   };
 
   return (
@@ -124,5 +134,27 @@ function UploadVideoButton() {
         <Text className="text-text opacity-50">{i18n.t("new_diary_desc")}</Text>
       </View>
     </TouchableOpacity>
+  );
+}
+
+// Loading video overlay
+function LoadingOverlay() {
+  const { isUploading } = useVideoStore();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(isUploading ? 1 : 0, { duration: 200 }),
+      pointerEvents : isUploading ? "auto" : "none",
+    };
+  });
+
+  return (
+    <Animated.View
+      style={[animatedStyle]}
+      className="absolute bg-background top-0 right-0 left-0 bottom-0 flex flex-col items-center justify-center z-40"
+    >
+      <ActivityIndicator size="large" className="text-text" />
+      <Text className="text-text mt-4">Uploading video...</Text>
+    </Animated.View>
   );
 }

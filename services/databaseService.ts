@@ -6,7 +6,7 @@ const db = SQLite.openDatabaseSync("videoDiary.db");
 export const initDatabase = async () => {
   try {
     await db.execAsync(
-      "CREATE TABLE IF NOT EXISTS videos (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, videoUri TEXT NOT NULL, createdAt TEXT NOT NULL)"
+      "CREATE TABLE IF NOT EXISTS videos (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, videoUri TEXT NOT NULL, createdAt TEXT NOT NULL, width BIGINT, height BIGINT)"
     );
   } catch (error) {
     console.error("Database initialization error:", error);
@@ -16,13 +16,15 @@ export const initDatabase = async () => {
 export const insertVideo = async (video: VideoDiary) => {
   try {
     await db.runAsync(
-      "INSERT INTO videos (id, title, description, videoUri, createdAt) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO videos (id, title, description, videoUri, createdAt, width, height) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
         video.id,
         video.title,
         video.description,
         video.videoUri,
         video.createdAt,
+        video.width,
+        video.height,
       ]
     );
     console.log("Video inserted successfully");

@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useVideoStore } from "@/stores/useVideoStore";
 import { VideoView, useVideoPlayer } from "expo-video";
@@ -13,9 +7,10 @@ import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import i18n from "@/locales/i18n";
 import { useRouter } from "expo-router";
+import { BlurView } from "expo-blur";
 
 export default function VideoEdit() {
-  const { isUploading, video, setVideo } = useVideoStore();
+  const { video, setVideo } = useVideoStore();
   const { insets, height } = useScreenDimensions();
   const router = useRouter();
 
@@ -29,15 +24,14 @@ export default function VideoEdit() {
       style={{ paddingTop: insets.top, height: height }}
       className="flex-1 bg-background px-4 flex flex-col items-center gap-4"
     >
-      <TouchableOpacity
-        onPress={goBack}
-        className="w-full flex flex-row items-center justify-start gap-2"
-      >
-        <Text className="font-medium text-text">{i18n.t("cancel")}</Text>
-      </TouchableOpacity>
-      {isUploading && <ActivityIndicator className="text-text" />}
-      {video && !isUploading && (
+      {video && (
         <View className="w-full flex flex-col flex-1 gap-6">
+          <TouchableOpacity
+            onPress={goBack}
+            className="w-full flex flex-row items-center justify-start gap-2"
+          >
+            <Text className="font-medium text-text">{i18n.t("cancel")}</Text>
+          </TouchableOpacity>
           <VideoDisplay />
           <TimelineView />
           <ClipDurationSelector />
@@ -99,7 +93,7 @@ function VideoDisplay() {
   };
 
   return (
-    <View className="w-full h-[55%] flex items-center justify-center overflow-hidden">
+    <View className="w-full h-[50%] flex items-center justify-center overflow-hidden rounded-2xl">
       {player && (
         <>
           <TouchableOpacity
@@ -116,7 +110,14 @@ function VideoDisplay() {
           </TouchableOpacity>
           <VideoView
             player={player}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", position: "absolute", top: 0, right: 0 }}
+            nativeControls={false}
+            contentFit="cover"
+          />
+          <BlurView intensity={60} tint="dark" style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0, zIndex: 2 }} />
+          <VideoView
+            player={player}
+            style={{ width: "100%", height: "100%" , zIndex: 3 }}
             nativeControls={false}
           />
         </>
@@ -161,7 +162,7 @@ function TimelineView() {
   };
 
   const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+    "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
   return (
     <View className="w-full flex flex-col gap-4">
@@ -253,8 +254,8 @@ function NextButton() {
 
   const navigate = () => {
     if (!player) return;
-    player.pause()
-    player.currentTime = startTime
+    player.pause();
+    player.currentTime = startTime;
     router.push("/video-add");
   };
 

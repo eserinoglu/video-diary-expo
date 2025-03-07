@@ -20,5 +20,7 @@
     "min_title_warning" : "Title must be at least 3 characters long.",
     "max_title_warning" : "Title must be at most 20 characters long.",
     "min_description_warning" : "Description must be at least 10 characters long.",
-    "max_description_warning" : "Description must be at most 100 characters long."
+    "max_description_warning" : "Description must be at most 100 characters long.",
+    "clip_detail" : "Clip Detail",
+    "save_gallery" : "Save to Gallery"
 }
