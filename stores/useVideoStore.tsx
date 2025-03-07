@@ -6,6 +6,7 @@ interface VideoStore {
   // Video and upload status
   video: ImagePickerAsset | null;
   isUploading: boolean;
+  croppedVideos : string[]
   
   // Player and video times
   player: VideoPlayer | null;
@@ -26,7 +27,8 @@ interface VideoStore {
   setStartTime: (startTime: number) => void;
   setEndTime: (endTime: number) => void;
   setVideoDuration: (videoDuration: number) => void;
-  setSelectedTrimmingDuration: (selectedTrimmingDuration: number) => void;
+  setSelectedTrimmingDuration: (selectedTrimmingDuration: number) => void
+  addCroppedVideo: (croppedVideo : string) => void
   
   // Thumbnail generation
   generateThumbnails: () => Promise<void>;
@@ -39,6 +41,7 @@ export const useVideoStore = create<VideoStore>((set, get) => {
   return {
     video: null,
     isUploading: false,
+    croppedVideos : [],
     player: null,
     startTime: 0,
     endTime: 5,
@@ -98,6 +101,9 @@ export const useVideoStore = create<VideoStore>((set, get) => {
         endTime: Math.min(startTime + selectedTrimmingDuration, durationInSeconds),
         pixelForEachSecond : 200 / selectedTrimmingDuration
       });
+    },
+    addCroppedVideo : (croppedVideo: string) => {
+      set({ croppedVideos: [...get().croppedVideos, croppedVideo] });
     },
     // Thumbnail genertation
     generateThumbnails: async () => {

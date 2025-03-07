@@ -13,6 +13,7 @@ export default function Index() {
   const isDarkMode = useColorScheme().colorScheme === "dark";
   const { insets, horizontalPadding } = useScreenDimensions();
   const topPadding = insets.top + 20;
+  const {croppedVideos} = useVideoStore()
 
   // Settings sheet open/close state
   const [isSettingsSheetVisible, setIsSettingsSheetVisible] = useState(false);
@@ -52,6 +53,11 @@ export default function Index() {
         </View>
         {/* Upload video button */}
         <UploadVideoButton />
+        <View className="flex flex-col gap-4 mt-10">
+          {croppedVideos.map((video, index) => (
+            <Text key={index} >{video}</Text>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -60,6 +66,7 @@ export default function Index() {
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useVideoStore } from "@/stores/useVideoStore";
+
 function UploadVideoButton() {
   const router = useRouter();
   const isDarkMode = useColorTheme().colorScheme === "dark";

@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
@@ -69,11 +70,13 @@ const formSchema = z.object({
     .max(100, { message: "max_description_warning" }),
 });
 
+import { useVideoCrop } from "@/hooks/useVideoCrop";
+import { useVideoStore } from "@/stores/useVideoStore";
 function FormSection() {
   const {
     control,
     handleSubmit,
-    trigger,
+    getValues,
     formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(formSchema),
@@ -84,12 +87,28 @@ function FormSection() {
     mode: "onChange",
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const { mutate, isPending, isError, error, isSuccess } = useVideoCrop();
+  const { video, startTime, selectedTrimmingDuration } = useVideoStore();
+
+  const handleVideoCrop = () => {
+    if (!video) return;
+    mutate({
+      videoUri: video.uri,
+      startTime: startTime,
+      trimDuration: selectedTrimmingDuration,
+      title: getValues("title"),
+      description: getValues("description"),
+    });
   };
 
+  // Submit function
+  const onSubmit = () => {
+    handleVideoCrop();
+  };
+
+  // Error text component
   const errorText = (text: string | undefined) => {
-    const errorText = text
+    const errorText = text;
     const animatedErrorBoxStyle = useAnimatedStyle(() => {
       return {
         opacity: withTiming(errorText ? 1 : 0),
@@ -106,6 +125,7 @@ function FormSection() {
     );
   };
 
+  // Textfield component
   const textField = (
     name: "title" | "description",
     placeholder: string,
@@ -139,6 +159,11 @@ function FormSection() {
 
   return (
     <ScrollView bounces={false} className="flex-1">
+      {isPending && <ActivityIndicator className="text-text" />}
+      {isError && <Text className="text-red-500">{error?.message}</Text>}
+      {isSuccess && (
+        <Text className="text-green-500">Video cropped successfully</Text>
+      )}
       <KeyboardAvoidingView
         behavior="padding"
         className="flex-col flex-1 gap-4"

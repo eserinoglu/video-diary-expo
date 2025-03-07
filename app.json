@@ -35,7 +35,7 @@
           "imageWidth": 100,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
-          "borderRadius" : 24
+          "borderRadius": 24
         }
       ],
       [
@@ -49,11 +49,26 @@
         }
       ],
       [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            "enableFTS": false,
+            "useSQLCipher": false
+          },
+          "ios": {
+            "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
+          }
+        }
+      ],
+      [
         "expo-document-picker",
         {
           "iCloudContainerEnvironment": "Production"
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true
