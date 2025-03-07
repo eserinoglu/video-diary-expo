@@ -19,9 +19,7 @@ export const cropVideo = async (
 ): Promise<{ success: boolean; outputPath: string }> => {
   try {
     // Trim command
-    const command = `-i ${videoUri} -ss ${formatStartTime(
-      startTime
-    )} -t ${trimDuration} -c copy ${outputPath}`;
+    const command = `-ss ${formatStartTime(startTime)} -i ${videoUri} -t ${trimDuration} -c copy "${outputPath}"`;
 
     // Execute the command
     const session = await FFmpegKit.execute(command);

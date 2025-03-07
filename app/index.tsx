@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
+import { VideoDiary } from "@/types/VideoDiary";
 
 export default function Index() {
   // Screen dimensions and color theme
@@ -62,8 +63,10 @@ export default function Index() {
         {/* Upload video button */}
         <UploadVideoButton />
 
-        <View className="flex flex-col items-start gap-3">
-          {videos.map((video) => (<Text key={video.id}>{video.videoUri}</Text>))}
+        <View className="flex flex-col items-start gap-3 mt-10">
+          {videos.map((video) => (
+            <VideoListRow key={video.id} video={video} />
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -73,7 +76,8 @@ export default function Index() {
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useVideoStore } from "@/stores/useVideoStore";
-import { getAllVideos, VideoDiary } from "@/services/databaseService";
+import { getAllVideos } from "@/services/databaseService";
+import VideoListRow from "@/components/Home/VideoListRow";
 
 function UploadVideoButton() {
   const router = useRouter();

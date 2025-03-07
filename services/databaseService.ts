@@ -1,4 +1,5 @@
 import * as SQLite from "expo-sqlite";
+import { VideoDiary } from "@/types/VideoDiary";
 
 const db = SQLite.openDatabaseSync("videoDiary.db");
 
@@ -78,12 +79,4 @@ export const updateVideo = async (
     console.error("Update video error:", error);
     throw error;
   }
-};
-
-export type VideoDiary = {
-  id: string;
-  title: string;
-  description: string;
-  videoUri: string;
-  createdAt: string;
 };

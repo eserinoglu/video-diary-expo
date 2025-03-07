@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cropVideo } from "@/services/videoService";
 import * as FileSystem from "expo-file-system";
-import { insertVideo, VideoDiary } from "@/services/databaseService";
+import { insertVideo } from "@/services/databaseService";
+import { VideoDiary } from "@/types/VideoDiary";
 
 export const useVideoCrop = () => {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export const useVideoCrop = () => {
       title: string;
       description: string;
     }) => {
-      const outputFileName = `${title}-${Date.now()}.mp4`;
+      const outputFileName = `${title.toLowerCase()}-${Date.now().toString()}.mp4`;
       const outputPath = `${FileSystem.documentDirectory}videos/${outputFileName}`;
 
       await FileSystem.makeDirectoryAsync(

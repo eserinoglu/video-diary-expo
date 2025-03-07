@@ -10,14 +10,18 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { initDatabase } from "@/services/databaseService";
 import * as SplashScreen from "expo-splash-screen";
 
+
+// Disable font scaling
 (Text as any).defaultProps = {
   allowFontScaling: false,
 };
 
+// Initialize the app
 const initializeApp = async () => {
   await Promise.all([loadSavedLanguage(), initDatabase()]);
 };
 
+// Prevent the splash screen from auto hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
