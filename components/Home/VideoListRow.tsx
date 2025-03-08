@@ -43,7 +43,7 @@ export default function VideoListRow({ video }: { video: VideoDiary }) {
       <View className="w-full p-3 rounded-2xl bg-neutral-100 dark:bg-neutral-900 flex flex-row items-center gap-3">
         <Image
           source={thumbnail}
-          style={{ width: 60, height: 70, borderRadius: 12 }}
+          style={{ width: 70, height: 65, borderRadius: 12 }}
         />
         <View className="flex flex-col gap-1 items-start flex-1">
           <Text className="text-xl font-semibold text-text">{video.title}</Text>

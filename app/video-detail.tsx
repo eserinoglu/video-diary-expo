@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
@@ -13,6 +13,7 @@ import { useVideoEdit } from "@/stores/useVideoEdit";
 import { VideoDiary } from "@/types/VideoDiary";
 import DeleteVideo from "@/components/VideoDetail/DeleteVideoSheet";
 import { deleteVideo } from "@/services/databaseService";
+import { saveToGallery } from "@/services/videoService";
 
 export default function VideoDetail() {
   const params = useLocalSearchParams();
@@ -88,6 +89,7 @@ export default function VideoDetail() {
       <View className="w-full rounded-3xl overflow-hidden flex items-center mt-2 justify-center h-[45%]">
         <BlurView
           intensity={60}
+          experimentalBlurMethod="dimezisBlurView"
           tint={isDarkMode ? "dark" : "light"}
           style={{
             position: "absolute",
@@ -130,12 +132,7 @@ export default function VideoDetail() {
       </View>
       {/* Video actions */}
       <View className="flex flex-row items-center gap-2 w-full absolute bottom-10 left-4 right-4">
-        <TouchableOpacity className="flex-1 bg-tint rounded-3xl h-[50px] flex flex-row items-center justify-center gap-2">
-          <Feather name="download" size={20} color={"white"} />
-          <Text className="text-white font-semibold">
-            {i18n.t("save_gallery")}
-          </Text>
-        </TouchableOpacity>
+        <SaveToGalleryButton videoUri={uri as string} />
         <TouchableOpacity
           onPress={handleSelectedVideo}
           className="w-1/5 bg-neutral-200 dark:bg-neutral-800 rounded-3xl h-[50px] flex flex-row items-center justify-center gap-2"
@@ -157,5 +154,36 @@ export default function VideoDetail() {
       />
       <VideoEditSheet />
     </View>
+  );
+}
+
+function SaveToGalleryButton({ videoUri }: { videoUri: string }) {
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [isSaved, setIsSaved] = React.useState(false);
+  const handleSaveToGallery = async () => {
+    setIsSaving(true);
+    await saveToGallery(videoUri);
+    setIsSaving(false);
+    setIsSaved(true);
+  };
+  return (
+    <TouchableOpacity
+      disabled={isSaving}
+      onPress={handleSaveToGallery}
+      className="flex-1 bg-tint rounded-3xl h-[50px] flex flex-row items-center justify-center gap-2"
+    >
+      <Feather name="download" size={20} color={"white"} />
+      {isSaving ? (
+        <ActivityIndicator className="text-white" />
+      ) : isSaved ? (
+        <Text className="text-white font-semibold">
+          {i18n.t("video_saved")}
+        </Text>
+      ) : (
+        <Text className="text-white font-semibold">
+          {i18n.t("save_gallery")}
+        </Text>
+      )}
+    </TouchableOpacity>
   );
 }
