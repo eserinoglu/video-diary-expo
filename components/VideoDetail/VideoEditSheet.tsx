@@ -46,11 +46,9 @@ export default function VideoEditSheet({
     mode: "onChange",
   });
 
-  const keyboardHeight = Keyboard.metrics()?.height || 0;
-
   return (
     <BottomSheet
-      height={360}
+      height={380}
       dismiss={() => setIsVisible(false)}
       isVisible={isVisible}
     >
@@ -75,7 +73,7 @@ export default function VideoEditSheet({
         {/* Form */}
         <KeyboardAvoidingView
           behavior="padding"
-          className="flex-col justify-start gap-4 w-full"
+          className="flex-col justify-start gap-4 w-full mt-3"
         >
           <TextField
             errors={errors}

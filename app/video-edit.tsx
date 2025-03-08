@@ -27,7 +27,7 @@ export default function VideoEdit() {
 
   return (
     <View
-      style={{ paddingTop: insets.top, height: height }}
+      style={{ paddingTop: insets.top + 10, height: height }}
       className="flex-1 bg-background px-4 flex flex-col items-center gap-4"
     >
       <CancelSheet
@@ -295,7 +295,7 @@ function NextButton() {
   return (
     <TouchableOpacity
       onPress={navigate}
-      style={{ bottom: insets.bottom }}
+      style={{ bottom: insets.bottom + 10 }}
       className="w-full rounded-3xl bg-tint h-[50px] flex items-center justify-center mt-auto"
     >
       <Text className="font-semibold text-lg text-white">{i18n.t("next")}</Text>

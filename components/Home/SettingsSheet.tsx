@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StatusBar } from "react-native";
 import React from "react";
 import Animated, {
   runOnJS,
@@ -204,7 +204,7 @@ function LanguageSelectionScreen({
   const animatedLanguageSelectScreenStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: withTiming(isLanguageSelectOpen ? 0 : width) }],
-      paddingTop: insets.top + 20,
+      paddingTop: (StatusBar.currentHeight ?? insets.top) + 20
     };
   });
 

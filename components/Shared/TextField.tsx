@@ -39,7 +39,9 @@ export default function TextField({
             className="bg-neutral-100 dark:bg-neutral-900 rounded-2xl p-3 text-xl text-text flex items-start justify-start"
             style={{ height: isDescription ? 100 : 50 }}
             multiline={isDescription}
-            numberOfLines={isDescription ? 5 : 1}
+            numberOfLines={isDescription ? 4 : 1}
+            returnKeyType="done"
+            returnKeyLabel="done"
           />
         )}
         name={name}

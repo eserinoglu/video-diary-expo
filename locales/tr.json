@@ -34,5 +34,9 @@
     "crop_success" : "Video başarıyla kaydedildi.",
     "navigate_root" : "Ana sayfa",
     "crop_failure" : "Video kaydedilirken bir hata oluştu.",
-    "retry" : "Tekrar Dene"
+    "retry" : "Tekrar Dene",
+    "no_saved_videos" : "Henüz bir video oluşturmadınız.",
+    "generated_clips" : "Oluşturulan Klipler",
+    "new_diary" : "Yeni Günlük",
+    "uploading_video" : "Video Yükleniyor"
 }

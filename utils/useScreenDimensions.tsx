@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 
 export const useScreenDimensions = () => {
   const insets = useSafeAreaInsets();
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
   return {
     width,
     height,

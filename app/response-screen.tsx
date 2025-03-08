@@ -22,14 +22,14 @@ export default function ResponseScreen() {
 
   return (
     <View
-      style={{ paddingBottom: insets.bottom }}
+      style={{ paddingBottom: insets.bottom + 10 }}
       className="flex-1 bg-background flex items-center justify-center"
     >
       {/* Success screen */}
       {status === "success" && (
         <View className="flex flex-col gap-6 items-center w-full px-4 h-full justify-center">
           <View className="flex flex-col w-full gap-6 my-auto">
-            <View className="p-5 rounded-full mx-auto bg-green-100">
+            <View className="p-5 rounded-full mx-auto bg-green-100 dark:bg-green-900">
               <Feather name="check" size={64} color="#22c55e" />
             </View>
             <Text className="text-text text-3xl text-center font-semibold">
@@ -50,7 +50,7 @@ export default function ResponseScreen() {
       {status === "error" && (
         <View className="flex flex-col gap-6 items-center w-full px-4 h-full justify-center">
           <View className="flex flex-col w-full gap-6 my-auto">
-            <View className="p-5 rounded-full mx-auto bg-red-100">
+            <View className="p-5 rounded-full mx-auto bg-red-100 dark:bg-red-900">
               <Ionicons name="warning" size={64} color="#ef4444" />
             </View>
             <Text className="text-text text-3xl text-center font-semibold">

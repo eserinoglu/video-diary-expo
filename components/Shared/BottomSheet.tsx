@@ -40,7 +40,7 @@ export default function BottomSheet({
   }, []);
 
   // Sheet height
-  const sheetHeight = height + insets.bottom;
+  const sheetHeight = height + insets.bottom + 12;
 
   const animatedContainerStyle = useAnimatedStyle(() => {
     return {
@@ -64,7 +64,7 @@ export default function BottomSheet({
     return {
       height: withTiming(sheetHeight + keyboardHeight.value),
       transform: [{ translateY: withTiming(isVisible ? 0 : sheetHeight) }],
-      paddingBottom: insets.bottom,
+      paddingBottom: insets.bottom + 12,
     };
   });
 

@@ -52,7 +52,7 @@ export default function VideoDetail() {
   return (
     <View
       className="flex-1 bg-background px-4 w-full flex flex-col gap-4"
-      style={{ paddingTop: insets.top + 5, paddingBottom: insets.bottom + 5 }}
+      style={{ paddingTop: insets.top + 10, paddingBottom: insets.bottom + 10 }}
     >
       {/* Loading overlay */}
       <LoadingOverlay isVisible={displayedVideo === null} />

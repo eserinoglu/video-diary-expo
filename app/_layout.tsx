@@ -2,8 +2,7 @@ import { Stack } from "expo-router";
 import "../global.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Text } from "react-native";
-import { loadSavedLanguage } from "@/locales/i18n";
-("@/locales/i18n");
+import { loadSavedLanguage } from "@/locales/i18n"
 import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
@@ -22,6 +21,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { getAllVideos } = useVideoDatabase();
   
+  // App state
   const [isAppReady, setIsAppReady] = useState(false);
 
   // Initialize the app

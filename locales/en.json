@@ -34,5 +34,9 @@
     "crop_success" : "Your video generated \nsuccessfully.",
     "navigate_root" : "Go home",
     "crop_failure" : "Failed to generate video.",
-    "retry" : "Retry"
+    "retry" : "Retry",
+    "no_saved_videos" : "You have not generated any clip yet.",
+    "generated_clips" : "Generated Clips",
+    "new_diary" : "New Diary",
+    "uploading_video" : "Uploading Video"
 }

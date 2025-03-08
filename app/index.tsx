@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Feather, FontAwesome6 } from "@expo/vector-icons";
+import { Entypo, Feather, FontAwesome6, Octicons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
 import SettingsSheet from "@/components/Home/SettingsSheet";
-import {useState } from "react";
+import { useState } from "react";
 import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
@@ -73,9 +73,31 @@ export default function Index() {
         <UploadVideoButton />
 
         <View className="flex flex-col items-start gap-3 mt-10">
-          {allVideos.map((video) => (
-            <VideoListRow key={video.id} video={video} />
-          ))}
+          <View className="flex flex-row items-center gap-2">
+            <Octicons name="history" size={16} color={isDarkMode ? "white" : "black"} style={{opacity: 0.5}} />
+            <Text className="text-text text-lg opacity-50">
+              {i18n.t("generated_clips")}
+            </Text>
+          </View>
+          {allVideos.length > 0 ? (
+            allVideos.map((video) => (
+              <VideoListRow key={video.id} video={video} />
+            ))
+          ) : (
+            <View className="w-full flex flex-col items-center gap-4 mt-12">
+              <View className="p-8 rounded-full bg-black/10 dark:bg-white/10">
+                <Entypo
+                  name="images"
+                  size={64}
+                  color={isDarkMode ? "white" : "black"}
+                  style={{ opacity: 0.4 }}
+                />
+              </View>
+              <Text className="text-text text-lg font-medium opacity-40">
+                {i18n.t("no_saved_videos")}
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -116,18 +138,18 @@ function UploadVideoButton() {
   return (
     <TouchableOpacity
       onPress={uploadVideo}
-      className="w-full rounded-3xl border border-neutral-200 dark:border-neutral-800 flex flex-row items-center gap-3 justify-start bg-neutral-100 dark:bg-neutral-900 p-6 mt-6"
+      className="w-full rounded-3xl flex flex-row items-center gap-3 justify-start bg-tint p-6 mt-6"
     >
       <View className="-rotate-12">
         <FontAwesome6
           name="photo-film"
           size={36}
-          color={isDarkMode ? "white" : "black"}
+          color={"white"}
         />
       </View>
-      <View className="flex flex-col items-start gap-1">
-        <Text className="text-2xl font-semibold text-text">New Diary</Text>
-        <Text className="text-text opacity-50">{i18n.t("new_diary_desc")}</Text>
+      <View className="flex flex-col items-start gap-1 flex-1">
+        <Text className="text-2xl font-semibold text-white">{i18n.t("new_diary")}</Text>
+        <Text className="text-white opacity-70">{i18n.t("new_diary_desc")}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -150,7 +172,7 @@ function LoadingOverlay() {
       className="absolute bg-background top-0 right-0 left-0 bottom-0 flex flex-col items-center justify-center z-40"
     >
       <ActivityIndicator size="large" className="text-text" />
-      <Text className="text-text mt-4">Uploading video</Text>
+      <Text className="text-text mt-4">{i18n.t("uploading_video")}</Text>
     </Animated.View>
   );
 }

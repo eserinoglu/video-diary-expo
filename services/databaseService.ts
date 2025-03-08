@@ -27,7 +27,6 @@ export const insertVideo = async (video: VideoDiary) => {
         video.height,
       ]
     );
-    console.log("Video inserted successfully");
   } catch (error) {
     console.error("Insert video error:", error);
     throw error;
@@ -37,7 +36,6 @@ export const insertVideo = async (video: VideoDiary) => {
 export const deleteVideo = async (id: string) => {
   try {
     await db.runAsync("DELETE FROM videos WHERE id = ?", [id]);
-    console.log("Video deleted successfully");
   } catch (error) {
     console.error("Delete video error:", error);
     throw error;
@@ -76,7 +74,6 @@ export const updateVideo = async (
       "UPDATE videos SET title = ?, description = ? WHERE id = ?",
       [title, description, id]
     );
-    console.log("Video updated successfully");
     return await getVideoById(id);
   } catch (error) {
     console.error("Update video error:", error);
