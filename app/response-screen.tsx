@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
-import { useLocalSearchParams, useRouter } from "expo-router/build/hooks";
+import React, { useEffect } from "react";
+import { useLocalSearchParams, useRouter, useNavigation } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import i18n from "@/locales/i18n";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
@@ -12,11 +12,20 @@ export default function ResponseScreen() {
 
   const insets = useScreenDimensions().insets;
 
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: false,
+    });
+  }, []);
+
   return (
     <View
       style={{ paddingBottom: insets.bottom }}
       className="flex-1 bg-background flex items-center justify-center"
     >
+      {/* Success screen */}
       {status === "success" && (
         <View className="flex flex-col gap-6 items-center w-full px-4 h-full justify-center">
           <View className="flex flex-col w-full gap-6 my-auto">
@@ -37,6 +46,7 @@ export default function ResponseScreen() {
           </TouchableOpacity>
         </View>
       )}
+      {/* Error screen */}
       {status === "error" && (
         <View className="flex flex-col gap-6 items-center w-full px-4 h-full justify-center">
           <View className="flex flex-col w-full gap-6 my-auto">

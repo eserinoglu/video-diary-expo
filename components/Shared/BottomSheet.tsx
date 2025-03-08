@@ -7,23 +7,25 @@ import Animated, {
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
 import { Pressable, Keyboard } from "react-native";
 
+interface BottomSheetProps {
+  children: React.ReactNode;
+  isVisible: boolean;
+  height: number;
+  dismiss: () => void;
+  dismissDisabled?: boolean;
+}
+
 export default function BottomSheet({
   children,
   isVisible,
   height,
   dismiss,
   dismissDisabled = false,
-}: {
-  children: React.ReactNode;
-  isVisible: boolean;
-  height: number;
-  dismiss: () => void;
-  dismissDisabled?: boolean;
-}) {
+}: BottomSheetProps) {
   const insets = useScreenDimensions().insets;
 
+  // Keyboard listener and height value
   const keyboardHeight = useSharedValue(0);
-
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", (e) => {
       keyboardHeight.value = withTiming(e.endCoordinates.height);
@@ -37,6 +39,7 @@ export default function BottomSheet({
     };
   }, []);
 
+  // Sheet height
   const sheetHeight = height + insets.bottom;
 
   const animatedContainerStyle = useAnimatedStyle(() => {
@@ -56,6 +59,7 @@ export default function BottomSheet({
       justifyContent: "flex-end",
     };
   });
+
   const animatedSheetStyle = useAnimatedStyle(() => {
     return {
       height: withTiming(sheetHeight + keyboardHeight.value),

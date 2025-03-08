@@ -9,15 +9,13 @@ import {
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
 import SettingsSheet from "@/components/Home/SettingsSheet";
-import { useEffect, useRef, useState } from "react";
+import {useState } from "react";
 import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
-import { VideoDiary } from "@/types/VideoDiary";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
-import { getAllVideos } from "@/services/databaseService";
 import VideoListRow from "@/components/Home/VideoListRow";
 import Animated, {
   useAnimatedStyle,
@@ -31,7 +29,7 @@ export default function Index() {
   const { insets, horizontalPadding } = useScreenDimensions();
   const topPadding = insets.top + 20;
 
-  // Settings sheet open/close state
+  // Settings sheet open/close state and function
   const [isSettingsSheetVisible, setIsSettingsSheetVisible] = useState(false);
   const openSettingsSheet = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -86,11 +84,14 @@ export default function Index() {
 
 // Upload new video button
 function UploadVideoButton() {
+  // Navigation
   const router = useRouter();
+
+  // Color theme
   const isDarkMode = useColorTheme().colorScheme === "dark";
 
+  // Video trim store states and functions
   const { setVideo, setIsUploading } = useVideoTrimStore();
-
   const uploadVideo = async () => {
     setIsUploading(true);
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -149,7 +150,7 @@ function LoadingOverlay() {
       className="absolute bg-background top-0 right-0 left-0 bottom-0 flex flex-col items-center justify-center z-40"
     >
       <ActivityIndicator size="large" className="text-text" />
-      <Text className="text-text mt-4">Uploading video...</Text>
+      <Text className="text-text mt-4">Uploading video</Text>
     </Animated.View>
   );
 }

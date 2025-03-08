@@ -8,19 +8,21 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+interface TextFieldProps {
+  name: "title" | "description";
+  placeholder: string;
+  isDescription?: boolean;
+  control: Control<{ title: string; description: string }>;
+  errors: FieldErrors<{ title: string; description: string }>;
+}
+
 export default function TextField({
   name,
   placeholder,
   isDescription = false,
   control,
   errors,
-}: {
-  name: "title" | "description";
-  placeholder: string;
-  isDescription?: boolean;
-  control: Control<{ title: string; description: string }>;
-  errors: FieldErrors<{ title: string; description: string }>;
-}) {
+}: TextFieldProps) {
   return (
     <View className="w-full flex-flex-col gap-2">
       <Text className="text-xl font-medium opacity-50 text-text">

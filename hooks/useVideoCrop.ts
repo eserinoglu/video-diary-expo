@@ -70,7 +70,7 @@ export const useVideoCrop = () => {
       queryClient.invalidateQueries({ queryKey: ["croppedVideos"] });
     },
     onError: (error) => {
-      console.log(error);
-    }
+      throw error;
+    },
   });
 };

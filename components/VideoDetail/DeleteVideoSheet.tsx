@@ -4,17 +4,19 @@ import { Ionicons } from "@expo/vector-icons";
 import i18n from "@/locales/i18n";
 import BottomSheet from "../Shared/BottomSheet";
 
+interface DeleteVideoSheetProps {
+  isVisible: boolean;
+  dismiss: () => void;
+  handleDelete: () => Promise<void>;
+  isDeleting: boolean;
+}
+
 export default function DeleteVideoSheet({
   isVisible,
   dismiss,
   handleDelete,
   isDeleting,
-}: {
-  isVisible: boolean;
-  dismiss: () => void;
-  handleDelete: () => Promise<void>;
-  isDeleting: boolean;
-}) {
+}: DeleteVideoSheetProps) {
   return (
     <BottomSheet height={205} isVisible={isVisible} dismiss={dismiss}>
       {/* Sheet body */}

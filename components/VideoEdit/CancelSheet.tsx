@@ -5,13 +5,15 @@ import i18n from "@/locales/i18n";
 import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
 import { useRouter } from "expo-router";
 
+interface CancelSheetProps {
+  isVisible: boolean;
+  setIsVisible: (value: boolean) => void;
+}
+
 export default function CancelSheet({
   isVisible,
   setIsVisible,
-}: {
-  isVisible: boolean;
-  setIsVisible: (value: boolean) => void;
-}) {
+}: CancelSheetProps) {
   const { setVideo } = useVideoTrimStore();
   const router = useRouter();
 

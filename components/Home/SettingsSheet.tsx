@@ -20,15 +20,17 @@ import i18n, {
 } from "@/locales/i18n";
 import { useTranslation } from "react-i18next";
 
+interface SettingsSheetProps {
+  isVisible: boolean;
+  setIsVisible: (isVisible: boolean) => void;
+}
+
 export default function SettingsSheet({
   isVisible,
   setIsVisible,
-}: {
-  isVisible: boolean;
-  setIsVisible: (isVisible: boolean) => void;
-}) {
+}: SettingsSheetProps) {
   // Screen dimesions
-  const { insets, height, width } = useScreenDimensions();
+  const { insets, height } = useScreenDimensions();
 
   // Sheet dimension values
   const minHeight = 220 + insets.bottom;
@@ -76,14 +78,12 @@ export default function SettingsSheet({
       height: sheetHeight.value - swipeY.value,
     };
   });
-
   // Drag handle indicator
   const dragHandleIndicator = () => {
     return (
       <View className="w-[40px] h-[8px] rounded-full bg-neutral-200 dark:bg-neutral-700"></View>
     );
   };
-
   // Open/close language selection view
   const openLanguageSelection = () => {
     setIsLanguageSelectOpen(true);

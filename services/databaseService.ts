@@ -1,6 +1,5 @@
 import * as SQLite from "expo-sqlite";
 import { VideoDiary } from "@/types/VideoDiary";
-import * as FileSystem from "expo-file-system";
 
 const db = SQLite.openDatabaseSync("videoDiary.db");
 

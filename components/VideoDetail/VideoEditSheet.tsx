@@ -16,13 +16,15 @@ import { FormSchema } from "@/types/FormSchema";
 import TextField from "../Shared/TextField";
 import BottomSheet from "../Shared/BottomSheet";
 
+interface VideoEditSheetProps {
+  isVisible: boolean;
+  setIsVisible: (isVisible: boolean) => void;
+}
+
 export default function VideoEditSheet({
   isVisible,
   setIsVisible,
-}: {
-  isVisible: boolean;
-  setIsVisible: (isVisible: boolean) => void;
-}) {
+}: VideoEditSheetProps) {
   const { updateVideo, displayedVideo } = useVideoDatabase();
   const isDarkMode = useColorTheme().colorScheme === "dark";
 
@@ -44,8 +46,7 @@ export default function VideoEditSheet({
     mode: "onChange",
   });
 
-  const keyboardHeight = Keyboard.metrics()?.height || 0
-
+  const keyboardHeight = Keyboard.metrics()?.height || 0;
 
   return (
     <BottomSheet
