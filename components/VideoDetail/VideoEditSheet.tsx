@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
-import { useVideoInfoEdit } from "@/stores/useVideoInfoEdit";
+import React from "react";
+import { useVideoDatabase } from "@/stores/useVideoDatabase";
 import i18n from "@/locales/i18n";
 import { Feather } from "@expo/vector-icons";
 import { useColorTheme } from "@/utils/useColorTheme";
@@ -10,44 +10,33 @@ import { FormSchema } from "@/types/FormSchema";
 import TextField from "../Shared/TextField";
 import BottomSheet from "../Shared/BottomSheet";
 
-export default function VideoEditSheet() {
-  const { selectedVideo, setSelectedVideo, updateVideo } = useVideoInfoEdit();
+export default function VideoEditSheet({isVisible, setIsVisible} : {isVisible : boolean, setIsVisible : (isVisible : boolean) => void}) {
+  const { updateVideo, displayedVideo } = useVideoDatabase();
   const isDarkMode = useColorTheme().colorScheme === "dark";
-  const formSchema = FormSchema;
 
   const onSubmit = (data: { title: string; description: string }) => {
-    if (selectedVideo) {
-      updateVideo(selectedVideo.id, data.title, data.description);
-    }
+    if (!displayedVideo) return;
+    updateVideo(displayedVideo.id, data.title, data.description)
+    setIsVisible(false)
   };
   const {
     control,
     handleSubmit,
     formState: { isValid },
-    reset,
   } = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: selectedVideo?.title || "",
-      description: selectedVideo?.description || "",
+      title: displayedVideo?.title || "",
+      description: displayedVideo?.description || "",
     },
     mode: "onChange",
   });
 
-  useEffect(() => {
-    if (selectedVideo) {
-      reset({
-        title: selectedVideo.title,
-        description: selectedVideo.description,
-      });
-    }
-  }, [selectedVideo]);
-
   return (
     <BottomSheet
       height={380}
-      dismiss={() => setSelectedVideo(null)}
-      isVisible={selectedVideo !== null}
+      dismiss={() => setIsVisible(false)}
+      isVisible={isVisible}
     >
       <View className="w-full h-full flex flex-col">
         {/* Header */}
@@ -56,7 +45,7 @@ export default function VideoEditSheet() {
             {i18n.t("edit_video")}
           </Text>
           <TouchableOpacity
-            onPress={() => setSelectedVideo(null)}
+            onPress={() => setIsVisible(false)}
             className="bg-neutral-200 p-2 rounded-full dark:bg-neutral-700"
           >
             <Feather

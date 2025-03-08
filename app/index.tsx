@@ -14,6 +14,16 @@ import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
 import { VideoDiary } from "@/types/VideoDiary";
+import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
+import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
+import { getAllVideos } from "@/services/databaseService";
+import VideoListRow from "@/components/Home/VideoListRow";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { useVideoDatabase } from "@/stores/useVideoDatabase";
 
 export default function Index() {
   // Screen dimensions and color theme
@@ -28,14 +38,8 @@ export default function Index() {
     setIsSettingsSheetVisible(true);
   };
 
-  const [videos, setVideos] = useState<VideoDiary[]>([]);
-  useEffect(() => {
-    const fetchVideos = async () => {
-      const videos = await getAllVideos();
-      setVideos(videos);
-    };
-    fetchVideos();
-  }, []);
+  // Video database store
+  const { allVideos } = useVideoDatabase();
 
   return (
     <View className="flex-1">
@@ -71,7 +75,7 @@ export default function Index() {
         <UploadVideoButton />
 
         <View className="flex flex-col items-start gap-3 mt-10">
-          {videos.map((video) => (
+          {allVideos.map((video) => (
             <VideoListRow key={video.id} video={video} />
           ))}
         </View>
@@ -80,16 +84,7 @@ export default function Index() {
   );
 }
 
-import * as ImagePicker from "expo-image-picker";
-import { useRouter } from "expo-router";
-import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
-import { getAllVideos } from "@/services/databaseService";
-import VideoListRow from "@/components/Home/VideoListRow";
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-
+// Upload new video button
 function UploadVideoButton() {
   const router = useRouter();
   const isDarkMode = useColorTheme().colorScheme === "dark";
@@ -144,7 +139,7 @@ function LoadingOverlay() {
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: withTiming(isUploading ? 1 : 0, { duration: 200 }),
-      pointerEvents : isUploading ? "auto" : "none",
+      pointerEvents: isUploading ? "auto" : "none",
     };
   });
 

@@ -8,28 +8,30 @@ import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { initDatabase } from "@/services/databaseService";
+import { useVideoDatabase } from "@/stores/useVideoDatabase";
 import * as SplashScreen from "expo-splash-screen";
-
 
 // Disable font scaling
 (Text as any).defaultProps = {
   allowFontScaling: false,
 };
 
-// Initialize the app
-const initializeApp = async () => {
-  await Promise.all([loadSavedLanguage(), initDatabase()]);
-};
-
 // Prevent the splash screen from auto hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const { getAllVideos } = useVideoDatabase();
+  
   const [isAppReady, setIsAppReady] = useState(false);
+
+  // Initialize the app
+  const initializeApp = async () => {
+    await Promise.all([loadSavedLanguage(), initDatabase(), getAllVideos()]);
+  };
 
   useEffect(() => {
     const init = async () => {
-      await initializeApp()
+      await initializeApp();
       setIsAppReady(true);
     };
 

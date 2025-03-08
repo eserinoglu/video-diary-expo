@@ -37,14 +37,13 @@ export const insertVideo = async (video: VideoDiary) => {
 
 export const deleteVideo = async (id: string) => {
   try {
-    await db.runAsync("DELETE FROM videos WHERE id = ?", [id])
+    await db.runAsync("DELETE FROM videos WHERE id = ?", [id]);
     console.log("Video deleted successfully");
   } catch (error) {
     console.error("Delete video error:", error);
     throw error;
   }
 };
-
 
 export const getAllVideos = async (): Promise<VideoDiary[]> => {
   try {
@@ -72,13 +71,14 @@ export const updateVideo = async (
   id: string,
   title: string,
   description: string
-) => {
+): Promise<VideoDiary> => {
   try {
     await db.runAsync(
       "UPDATE videos SET title = ?, description = ? WHERE id = ?",
       [title, description, id]
     );
     console.log("Video updated successfully");
+    return await getVideoById(id);
   } catch (error) {
     console.error("Update video error:", error);
     throw error;
