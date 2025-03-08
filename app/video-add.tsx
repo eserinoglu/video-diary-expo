@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
@@ -71,20 +72,45 @@ function FormSection() {
     mode: "onChange",
   });
 
-  const { mutate } = useVideoCrop();
+  const { mutate, isPending } = useVideoCrop();
   const { video, startTime, selectedTrimmingDuration } = useVideoTrimStore();
+
+  const router = useRouter();
 
   const handleVideoCrop = () => {
     if (!video) return;
-    mutate({
-      videoUri: video.uri,
-      startTime: startTime,
-      trimDuration: selectedTrimmingDuration,
-      title: getValues("title"),
-      description: getValues("description"),
-      width: video.width,
-      height: video.height,
-    });
+    mutate(
+      {
+        videoUri: video.uri,
+        startTime: startTime,
+        trimDuration: selectedTrimmingDuration,
+        title: getValues("title"),
+        description: getValues("description"),
+        width: video.width,
+        height: video.height,
+      },
+      {
+        onSuccess: (result) => {
+          if (result.success) {
+            router.push({
+              pathname: "/response-screen",
+              params: { status: "success" },
+            });
+          } else {
+            router.push({
+              pathname: "/response-screen",
+              params: { status: "error" },
+            });
+          }
+        },
+        onError: () => {
+          router.push({
+            pathname: "/response-screen",
+            params: { status: "error" },
+          });
+        },
+      }
+    );
   };
 
   // Submit function
@@ -113,15 +139,21 @@ function FormSection() {
         />
       </KeyboardAvoidingView>
       <TouchableOpacity
-        disabled={!isValid}
-        onPress={handleSubmit(onSubmit)}
+        disabled={!isValid || isPending}
+        onPress={() => {
+          handleSubmit(onSubmit)();
+        }}
         className={`${
           isValid ? "bg-tint" : "bg-neutral-500"
-        } rounded-3xl p-4 mt-4`}
+        } rounded-3xl h-[45px] mt-4 flex items-center justify-center`}
       >
-        <Text className="text-white text-center text-lg font-semibold">
-          {i18n.t("save")}
-        </Text>
+        {isPending ? (
+          <ActivityIndicator className="text-white" />
+        ) : (
+          <Text className="text-white text-center text-lg font-semibold">
+            {i18n.t("save")}
+          </Text>
+        )}
       </TouchableOpacity>
     </ScrollView>
   );

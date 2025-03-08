@@ -12,11 +12,13 @@ export default function BottomSheet({
   isVisible,
   height,
   dismiss,
+  dismissDisabled = false,
 }: {
   children: React.ReactNode;
   isVisible: boolean;
   height: number;
   dismiss: () => void;
+  dismissDisabled?: boolean;
 }) {
   const insets = useScreenDimensions().insets;
 
@@ -35,7 +37,7 @@ export default function BottomSheet({
     };
   }, []);
 
-  const sheetHeight = height + insets.bottom
+  const sheetHeight = height + insets.bottom;
 
   const animatedContainerStyle = useAnimatedStyle(() => {
     return {
@@ -65,6 +67,7 @@ export default function BottomSheet({
   return (
     <Animated.View style={[animatedContainerStyle]}>
       <Pressable
+        disabled={dismissDisabled}
         onPress={dismiss}
         className="absolute top-0 left-0 right-0 bottom-0 z-10"
       ></Pressable>

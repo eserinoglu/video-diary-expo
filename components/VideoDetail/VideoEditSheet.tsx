@@ -5,7 +5,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { useVideoDatabase } from "@/stores/useVideoDatabase";
 import i18n from "@/locales/i18n";
 import { Feather } from "@expo/vector-icons";
@@ -15,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "@/types/FormSchema";
 import TextField from "../Shared/TextField";
 import BottomSheet from "../Shared/BottomSheet";
-import { useSharedValue, withTiming } from "react-native-reanimated";
 
 export default function VideoEditSheet({
   isVisible,

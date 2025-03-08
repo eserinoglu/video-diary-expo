@@ -30,5 +30,9 @@
     "video_saved" : "Saved",
     "cancel_desc" : "Are you sure you want to cancel editing? Your changes will be lost.",
     "discard" : "Discard",
-    "close" : "Close"
+    "close" : "Close",
+    "crop_success" : "Your video generated \nsuccessfully.",
+    "navigate_root" : "Go home",
+    "crop_failure" : "Failed to generate video.",
+    "retry" : "Retry"
 }

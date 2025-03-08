@@ -9,6 +9,16 @@ export const useVideoCrop = () => {
 
   const { insertVideo } = useVideoDatabase();
 
+  interface CropVideoMutation {
+    videoUri: string;
+    startTime: number;
+    trimDuration: number;
+    title: string;
+    description: string;
+    width: number;
+    height: number;
+  }
+
   return useMutation({
     mutationFn: async ({
       videoUri,
@@ -18,51 +28,49 @@ export const useVideoCrop = () => {
       description,
       width,
       height,
-    }: {
-      videoUri: string;
-      startTime: number;
-      trimDuration: number;
-      title: string;
-      description: string;
-      width: number;
-      height: number;
-    }) => {
-      const outputFileName = `${title
-        .toLowerCase()
-        .trim()}-${Date.now().toString()}.mp4`;
-      console.log("outputFileName", outputFileName);
-      const outputPath = `${FileSystem.documentDirectory}videos/${outputFileName}`;
+    }: CropVideoMutation) => {
+      try {
+        const outputFileName = `${title
+          .toLowerCase()
+          .trim()}-${Date.now().toString()}.mp4`;
+        const outputPath = `${FileSystem.documentDirectory}videos/${outputFileName}`;
 
-      await FileSystem.makeDirectoryAsync(
-        `${FileSystem.documentDirectory}videos/`,
-        { intermediates: true }
-      ).catch(() => {});
+        await FileSystem.makeDirectoryAsync(
+          `${FileSystem.documentDirectory}videos/`,
+          { intermediates: true }
+        ).catch(() => {});
 
-      const result = await cropVideo(
-        videoUri,
-        startTime,
-        trimDuration,
-        outputPath
-      );
+        const result = await cropVideo(
+          videoUri,
+          startTime,
+          trimDuration,
+          outputPath
+        );
 
-      if (result.success) {
-        const newVideo: VideoDiary = {
-          id: Date.now().toString(),
-          title,
-          description,
-          videoUri: result.outputPath,
-          createdAt: Date.now().toString(),
-          width,
-          height,
-        };
+        if (result.success) {
+          const newVideo: VideoDiary = {
+            id: Date.now().toString(),
+            title,
+            description,
+            videoUri: result.outputPath,
+            createdAt: Date.now().toString(),
+            width,
+            height,
+          };
 
-        await insertVideo(newVideo);
+          await insertVideo(newVideo);
+        }
+
+        return result;
+      } catch (error) {
+        throw error;
       }
-
-      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["croppedVideos"] });
     },
+    onError: (error) => {
+      console.log(error);
+    }
   });
 };
