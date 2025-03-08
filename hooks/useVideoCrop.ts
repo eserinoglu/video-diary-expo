@@ -25,7 +25,8 @@ export const useVideoCrop = () => {
       width: number;
       height: number;
     }) => {
-      const outputFileName = `${title.toLowerCase()}-${Date.now().toString()}.mp4`;
+      const outputFileName = `${title.toLowerCase().trim()}-${Date.now().toString()}.mp4`;
+      console.log("outputFileName", outputFileName);
       const outputPath = `${FileSystem.documentDirectory}videos/${outputFileName}`;
 
       await FileSystem.makeDirectoryAsync(

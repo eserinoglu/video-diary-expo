@@ -75,7 +75,7 @@ export default function DeleteVideo({
           {/* Cancel button */}
           <TouchableOpacity
             onPress={dismiss}
-            className="bg-neutral-200 dark:bg-neutral-800 h-full flex items-center justify-center rounded-2xl flex-1"
+            className="bg-neutral-200 dark:bg-neutral-700 h-full flex items-center justify-center rounded-2xl flex-1"
           >
             <Text className="text-text opacity-50 text-lg font-medium">
               {i18n.t("cancel")}

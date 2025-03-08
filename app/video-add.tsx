@@ -115,6 +115,7 @@ function FormSection() {
         <TextField
           name="description"
           placeholder="description_placeholder"
+          isDescription
           control={control}
         />
         <TouchableOpacity
