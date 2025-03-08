@@ -27,5 +27,8 @@
     "delete_video" : "Delete Video",
     "delete_video_desc" : "Are you sure you want to delete this video? This action cannot be undone.",
     "delete" : "Delete",
-    "video_saved" : "Saved"
+    "video_saved" : "Saved",
+    "cancel_desc" : "Are you sure you want to cancel editing? Your changes will be lost.",
+    "discard" : "Discard",
+    "close" : "Close"
 }

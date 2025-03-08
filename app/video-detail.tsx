@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { BlurView } from "expo-blur";
@@ -9,7 +9,6 @@ import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
 import { format } from "date-fns";
 import VideoEditSheet from "@/components/VideoDetail/VideoEditSheet";
-import { VideoDiary } from "@/types/VideoDiary";
 import { saveToGallery } from "@/services/videoService";
 import DeleteVideoSheet from "@/components/VideoDetail/DeleteVideoSheet";
 import { useVideoDatabase } from "@/stores/useVideoDatabase";

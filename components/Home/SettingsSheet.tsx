@@ -9,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import ColorSchemeToggle from "@/components/ColorSchemeToggle";
+import ColorSchemeToggle from "@/components/Home/ColorSchemeToggle";
 import * as Haptics from "expo-haptics";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { useColorTheme } from "@/utils/useColorTheme";

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
-import SettingsSheet from "@/components/SettingsSheet";
+import SettingsSheet from "@/components/Home/SettingsSheet";
 import { useEffect, useRef, useState } from "react";
 import * as Haptics from "expo-haptics";
 import i18n from "@/locales/i18n";

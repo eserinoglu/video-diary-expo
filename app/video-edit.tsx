@@ -6,29 +6,38 @@ import { useScreenDimensions } from "@/utils/useScreenDimensions";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import i18n from "@/locales/i18n";
-import { useRouter } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import { BlurView } from "expo-blur";
 import { useColorTheme } from "@/utils/useColorTheme";
+import CancelSheet from "@/components/VideoEdit/CancelSheet";
 
 export default function VideoEdit() {
-  const { video, setVideo } = useVideoTrimStore();
+  const { video } = useVideoTrimStore();
   const { insets, height } = useScreenDimensions();
-  const router = useRouter();
 
-  const goBack = () => {
-    setVideo(null);
-    router.back();
-  };
+  const [showCancelSheet, setShowCancelSheet] = useState(false);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: false,
+    });
+  }, []);
 
   return (
     <View
       style={{ paddingTop: insets.top, height: height }}
       className="flex-1 bg-background px-4 flex flex-col items-center gap-4"
     >
+      <CancelSheet
+        isVisible={showCancelSheet}
+        setIsVisible={setShowCancelSheet}
+      />
       {video && (
         <View className="w-full flex flex-col flex-1 gap-6">
           <TouchableOpacity
-            onPress={goBack}
+            onPress={() => setShowCancelSheet(true)}
             className="w-full flex flex-row items-center justify-start gap-2"
           >
             <Text className="font-medium text-text">{i18n.t("cancel")}</Text>
