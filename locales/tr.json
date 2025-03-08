@@ -27,5 +27,12 @@
     "delete_video" : "Videoyu Sil",
     "delete_video_desc" : "Bu videoyu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
     "delete" : "Sil",
-    "video_saved" : "Kaydedildi"
+    "video_saved" : "Kaydedildi",
+    "cancel_desc" : "İptal etmek istediğinizden emin misiniz? Yaptığınız değişiklikler kaydedilmeyecek.",
+    "discard" : "İptal",
+    "close" : "Vazgeç",
+    "crop_success" : "Video başarıyla kaydedildi.",
+    "navigate_root" : "Ana sayfa",
+    "crop_failure" : "Video kaydedilirken bir hata oluştu.",
+    "retry" : "Tekrar Dene"
 }
