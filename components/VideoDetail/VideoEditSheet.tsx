@@ -1,10 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { useVideoEdit } from "@/stores/useVideoEdit";
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 import i18n from "@/locales/i18n";
 import { Feather } from "@expo/vector-icons";
 import { useColorTheme } from "@/utils/useColorTheme";
@@ -12,34 +8,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "@/types/FormSchema";
 import TextField from "../Shared/TextField";
-import { useScreenDimensions } from "@/utils/useScreenDimensions";
+import BottomSheet from "../Shared/BottomSheet";
 
 export default function VideoEditSheet() {
   const { selectedVideo, setSelectedVideo, updateVideo } = useVideoEdit();
-
-  const sheetHeight = 425;
-
-  const insets = useScreenDimensions().insets;
-
   const isDarkMode = useColorTheme().colorScheme === "dark";
-
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: withTiming(
-        selectedVideo ? "rgba(0, 0, 0, 0.5)" : "transparent"
-      ),
-      pointerEvents: selectedVideo ? "auto" : "none",
-    };
-  });
-
-  const animatedSheetStyle = useAnimatedStyle(() => {
-    return {
-      height: sheetHeight,
-      transform: [{ translateY: withTiming(selectedVideo ? 0 : sheetHeight) }],
-      paddingBottom: insets.bottom,
-    };
-  });
-
   const formSchema = FormSchema;
 
   const onSubmit = (data: { title: string; description: string }) => {
@@ -71,14 +44,12 @@ export default function VideoEditSheet() {
   }, [selectedVideo]);
 
   return (
-    <Animated.View
-      style={[animatedContainerStyle]}
-      className="absolute bottom-0 left-0 top-0 right-0 flex-1 z-10 flex flex-col items-center justify-end"
+    <BottomSheet
+      height={380}
+      dismiss={() => setSelectedVideo(null)}
+      isVisible={selectedVideo !== null}
     >
-      <Animated.View
-        style={[animatedSheetStyle]}
-        className="w-full bg-white dark:bg-neutral-800 rounded-t-[24px] flex flex-col px-4 pt-6"
-      >
+      <View className="w-full h-full flex flex-col">
         {/* Header */}
         <View className="w-full flex flex-row items-center justify-between">
           <Text className="text-text text-3xl font-semibold">
@@ -117,7 +88,7 @@ export default function VideoEditSheet() {
             </Text>
           </TouchableOpacity>
         </View>
-      </Animated.View>
-    </Animated.View>
+      </View>
+    </BottomSheet>
   );
 }

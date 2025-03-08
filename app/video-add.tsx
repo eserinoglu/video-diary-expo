@@ -2,7 +2,6 @@ import {
   View,
   Text,
   Pressable,
-  TextInput,
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
@@ -14,6 +13,12 @@ import i18n from "@/locales/i18n";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useColorTheme } from "@/utils/useColorTheme";
+import { useVideoCrop } from "@/hooks/useVideoCrop";
+import { useVideoStore } from "@/stores/useVideoStore";
+import { FormSchema } from "@/types/FormSchema";
+import TextField from "@/components/Shared/TextField";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function VideoAdd() {
   const { insets } = useScreenDimensions();
@@ -51,16 +56,8 @@ function NavigationHeader() {
 }
 
 // Form section
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const formSchema = FormSchema;
-
-import { useVideoCrop } from "@/hooks/useVideoCrop";
-import { useVideoStore } from "@/stores/useVideoStore";
-import { FormSchema } from "@/types/FormSchema";
-import TextField from "@/components/Shared/TextField";
 function FormSection() {
+  const formSchema = FormSchema;
   const {
     control,
     handleSubmit,
@@ -107,11 +104,7 @@ function FormSection() {
         behavior="padding"
         className="flex-col flex-1 gap-4"
       >
-        <TextField
-          name="title"
-          placeholder="awesome_clip"
-          control={control}
-        />
+        <TextField name="title" placeholder="awesome_clip" control={control} />
         <TextField
           name="description"
           placeholder="description_placeholder"

@@ -11,9 +11,9 @@ import { format, set } from "date-fns";
 import VideoEditSheet from "@/components/VideoDetail/VideoEditSheet";
 import { useVideoEdit } from "@/stores/useVideoEdit";
 import { VideoDiary } from "@/types/VideoDiary";
-import DeleteVideo from "@/components/VideoDetail/DeleteVideoSheet";
 import { deleteVideo } from "@/services/databaseService";
 import { saveToGallery } from "@/services/videoService";
+import DeleteVideoSheet from "@/components/VideoDetail/DeleteVideoSheet";
 
 export default function VideoDetail() {
   const params = useLocalSearchParams();
@@ -146,7 +146,7 @@ export default function VideoDetail() {
         </TouchableOpacity>
       </View>
       {/* sheets */}
-      <DeleteVideo
+      <DeleteVideoSheet
         isVisible={deleteSheetVisible}
         dismiss={() => setDeleteSheetVisible(false)}
         handleDelete={handleDeleteVideo}
