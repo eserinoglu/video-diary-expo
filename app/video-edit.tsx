@@ -52,6 +52,7 @@ export default function VideoEdit() {
   );
 }
 
+// Video player
 function VideoDisplay() {
   const {
     video,
@@ -155,6 +156,7 @@ function VideoDisplay() {
   );
 }
 
+// Timeline
 function TimelineView() {
   // Get the necessary values from the store
   const {
@@ -240,6 +242,7 @@ function TimelineView() {
   );
 }
 
+// Clip duration selector
 function ClipDurationSelector() {
   const {
     trimmingDurationOptions,
@@ -275,6 +278,7 @@ function ClipDurationSelector() {
   );
 }
 
+// Next button
 function NextButton() {
   const insets = useScreenDimensions().insets;
   const router = useRouter();

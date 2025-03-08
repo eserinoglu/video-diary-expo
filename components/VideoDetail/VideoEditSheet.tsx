@@ -10,19 +10,25 @@ import { FormSchema } from "@/types/FormSchema";
 import TextField from "../Shared/TextField";
 import BottomSheet from "../Shared/BottomSheet";
 
-export default function VideoEditSheet({isVisible, setIsVisible} : {isVisible : boolean, setIsVisible : (isVisible : boolean) => void}) {
+export default function VideoEditSheet({
+  isVisible,
+  setIsVisible,
+}: {
+  isVisible: boolean;
+  setIsVisible: (isVisible: boolean) => void;
+}) {
   const { updateVideo, displayedVideo } = useVideoDatabase();
   const isDarkMode = useColorTheme().colorScheme === "dark";
 
   const onSubmit = (data: { title: string; description: string }) => {
     if (!displayedVideo) return;
-    updateVideo(displayedVideo.id, data.title, data.description)
-    setIsVisible(false)
+    updateVideo(displayedVideo.id, data.title, data.description);
+    setIsVisible(false);
   };
   const {
-    control,
     handleSubmit,
-    formState: { isValid },
+    control,
+    formState: { isValid, errors },
   } = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -58,12 +64,18 @@ export default function VideoEditSheet({isVisible, setIsVisible} : {isVisible : 
         </View>
         {/* Form */}
         <View className="flex-col flex-1 justify-end gap-4 w-full">
-          <TextField name="title" placeholder="title" control={control} />
           <TextField
+            errors={errors}
+            control={control}
+            name="title"
+            placeholder="title"
+          />
+          <TextField
+            errors={errors}
+            control={control}
             name="description"
             placeholder="description"
             isDescription
-            control={control}
           />
           <TouchableOpacity
             disabled={!isValid}

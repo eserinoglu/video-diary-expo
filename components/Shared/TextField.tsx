@@ -1,19 +1,25 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 import { TextInput } from "react-native-gesture-handler";
 import i18n from "@/locales/i18n";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
 export default function TextField({
   name,
   placeholder,
   isDescription = false,
   control,
+  errors,
 }: {
   name: "title" | "description";
   placeholder: string;
   isDescription?: boolean;
   control: Control<{ title: string; description: string }>;
+  errors: FieldErrors<{ title: string; description: string }>;
 }) {
   return (
     <View className="w-full flex-flex-col gap-2">
@@ -34,8 +40,22 @@ export default function TextField({
             numberOfLines={isDescription ? 5 : 1}
           />
         )}
-        name={name === "title" ? "title" : "description"}
+        name={name}
       />
+      <ErrorMessage message={errors[name]?.message} />
     </View>
+  );
+}
+
+function ErrorMessage({ message }: { message: string | undefined }) {
+  const animatedTextStyle = useAnimatedStyle(() => {
+    return {
+      height: withTiming(message ? 20 : 0),
+    };
+  });
+  return (
+    <Animated.Text className="text-red-500 text-sm" style={[animatedTextStyle]}>
+      {message && i18n.t(message)}
+    </Animated.Text>
   );
 }

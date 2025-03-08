@@ -18,18 +18,14 @@ import Animated, {
 } from "react-native-reanimated";
 
 export default function VideoDetail() {
+  // Video will be displayed and edited
   const { displayedVideo } = useVideoDatabase();
 
-  // Video edit functions and states
-  const { updateVideo } = useVideoDatabase();
+  // Video edit states
   const [isEditSheetVisible, setIsEditSheetVisible] = useState(false);
 
-  const handleUpdateVideo = async (title: string, description: string) => {
-    if (!displayedVideo) return;
-    await updateVideo(displayedVideo.id, title, description);
-  };
-
-  // Video deleting states
+  // Vide delete states and functions
+  const [deleteSheetVisible, setDeleteSheetVisible] = React.useState(false);
   const { deleteVideo } = useVideoDatabase();
   const [isDeleting, setIsDeleting] = React.useState(false);
   const handleDeleteVideo = async () => {
@@ -41,12 +37,13 @@ export default function VideoDetail() {
     router.back();
   };
 
-  const [deleteSheetVisible, setDeleteSheetVisible] = React.useState(false);
-
+  // Router
   const router = useRouter();
 
+  // Color theme
   const isDarkMode = useColorTheme().colorScheme === "dark";
 
+  // Safe area insets
   const insets = useScreenDimensions().insets;
 
   // Video player
@@ -89,44 +86,42 @@ export default function VideoDetail() {
             </TouchableOpacity>
           </View>
           {/* Video player */}
-          {player && (
-            <View className="w-full rounded-3xl overflow-hidden flex items-center mt-2 justify-center h-[50%]">
-              <BlurView
-                intensity={60}
-                experimentalBlurMethod="dimezisBlurView"
-                tint={isDarkMode ? "dark" : "light"}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                  zIndex: 2,
-                }}
-              />
-              <VideoView
-                player={player}
-                contentFit="cover"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                }}
-                nativeControls={false}
-              />
-              <VideoView
-                player={player}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  alignSelf: "center",
-                  zIndex: 3,
-                }}
-              />
-            </View>
-          )}
+          <View className="w-full rounded-3xl overflow-hidden flex items-center mt-2 justify-center h-[50%]">
+            <BlurView
+              intensity={60}
+              experimentalBlurMethod="dimezisBlurView"
+              tint={isDarkMode ? "dark" : "light"}
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                zIndex: 2,
+              }}
+            />
+            <VideoView
+              player={player}
+              contentFit="cover"
+              style={{
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                top: 0,
+                right: 0,
+              }}
+              nativeControls={false}
+            />
+            <VideoView
+              player={player}
+              style={{
+                width: "100%",
+                height: "100%",
+                alignSelf: "center",
+                zIndex: 3,
+              }}
+            />
+          </View>
           {/* Video metadata */}
           <View className="flex flex-col w-full items-start gap-2 mt-6">
             <Text className="text-3xl text-text font-bold">
@@ -156,7 +151,6 @@ export default function VideoDetail() {
           </View>
         </View>
       )}
-
       {/* sheets */}
       <DeleteVideoSheet
         isVisible={deleteSheetVisible}
@@ -176,6 +170,8 @@ export default function VideoDetail() {
 function SaveToGalleryButton({ videoUri }: { videoUri: string }) {
   const [isSaving, setIsSaving] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
+  
+  // Saving function
   const handleSaveToGallery = async () => {
     setIsSaving(true);
     await saveToGallery(videoUri);
