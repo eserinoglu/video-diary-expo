@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
-import { useVideoEdit } from "@/stores/useVideoEdit";
+import { useVideoInfoEdit } from "@/stores/useVideoInfoEdit";
 import i18n from "@/locales/i18n";
 import { Feather } from "@expo/vector-icons";
 import { useColorTheme } from "@/utils/useColorTheme";
@@ -11,7 +11,7 @@ import TextField from "../Shared/TextField";
 import BottomSheet from "../Shared/BottomSheet";
 
 export default function VideoEditSheet() {
-  const { selectedVideo, setSelectedVideo, updateVideo } = useVideoEdit();
+  const { selectedVideo, setSelectedVideo, updateVideo } = useVideoInfoEdit();
   const isDarkMode = useColorTheme().colorScheme === "dark";
   const formSchema = FormSchema;
 

@@ -82,7 +82,7 @@ export default function Index() {
 
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
-import { useVideoStore } from "@/stores/useVideoStore";
+import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
 import { getAllVideos } from "@/services/databaseService";
 import VideoListRow from "@/components/Home/VideoListRow";
 import Animated, {
@@ -94,7 +94,7 @@ function UploadVideoButton() {
   const router = useRouter();
   const isDarkMode = useColorTheme().colorScheme === "dark";
 
-  const { setVideo, setIsUploading } = useVideoStore();
+  const { setVideo, setIsUploading } = useVideoTrimStore();
 
   const uploadVideo = async () => {
     setIsUploading(true);
@@ -139,7 +139,7 @@ function UploadVideoButton() {
 
 // Loading video overlay
 function LoadingOverlay() {
-  const { isUploading } = useVideoStore();
+  const { isUploading } = useVideoTrimStore();
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

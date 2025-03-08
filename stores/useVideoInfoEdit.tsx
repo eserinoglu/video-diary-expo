@@ -13,7 +13,7 @@ interface VideEditState {
   ) => Promise<void>;
 }
 
-export const useVideoEdit = create<VideEditState>((set, get) => {
+export const useVideoInfoEdit = create<VideEditState>((set, get) => {
   return {
     selectedVideo: null,
     isUpdating: false,

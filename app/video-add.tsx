@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useColorTheme } from "@/utils/useColorTheme";
 import { useVideoCrop } from "@/hooks/useVideoCrop";
-import { useVideoStore } from "@/stores/useVideoStore";
+import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
 import { FormSchema } from "@/types/FormSchema";
 import TextField from "@/components/Shared/TextField";
 import { useForm } from "react-hook-form";
@@ -73,7 +73,7 @@ function FormSection() {
   });
 
   const { mutate, isPending, isError, error, isSuccess } = useVideoCrop();
-  const { video, startTime, selectedTrimmingDuration } = useVideoStore();
+  const { video, startTime, selectedTrimmingDuration } = useVideoTrimStore();
 
   const handleVideoCrop = () => {
     if (!video) return;

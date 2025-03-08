@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useVideoStore } from "@/stores/useVideoStore";
+import { useVideoTrimStore } from "@/stores/useVideoTrimStore";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
 import { Feather } from "@expo/vector-icons";
@@ -11,7 +11,7 @@ import { BlurView } from "expo-blur";
 import { useColorTheme } from "@/utils/useColorTheme";
 
 export default function VideoEdit() {
-  const { video, setVideo } = useVideoStore();
+  const { video, setVideo } = useVideoTrimStore();
   const { insets, height } = useScreenDimensions();
   const router = useRouter();
 
@@ -51,7 +51,7 @@ function VideoDisplay() {
     generateThumbnails,
     startTime,
     selectedTrimmingDuration,
-  } = useVideoStore();
+  } = useVideoTrimStore();
 
   const newPlayer = video ? useVideoPlayer(video.uri) : null;
 
@@ -158,7 +158,7 @@ function TimelineView() {
     startTime,
     endTime,
     formatTime,
-  } = useVideoStore();
+  } = useVideoTrimStore();
 
   // UI calculations
   const screenWidth = useScreenDimensions().width - 32; // Width of the screen minus the padding
@@ -236,7 +236,7 @@ function ClipDurationSelector() {
     trimmingDurationOptions,
     selectedTrimmingDuration,
     setSelectedTrimmingDuration,
-  } = useVideoStore();
+  } = useVideoTrimStore();
   return (
     <View className="flex flex-col gap-3 items-start">
       <Text className="text-text opacity-50">{i18n.t("clip_duration")}</Text>
@@ -270,7 +270,7 @@ function NextButton() {
   const insets = useScreenDimensions().insets;
   const router = useRouter();
 
-  const { player, startTime } = useVideoStore();
+  const { player, startTime } = useVideoTrimStore();
 
   const navigate = () => {
     if (!player) return;

@@ -34,7 +34,7 @@ interface VideoStore {
   formatTime: (seconds: number) => string;
 }
 
-export const useVideoStore = create<VideoStore>((set, get) => {
+export const useVideoTrimStore = create<VideoStore>((set, get) => {
   return {
     video: null,
     isUploading: false,

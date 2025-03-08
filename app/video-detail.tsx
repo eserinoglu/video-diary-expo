@@ -9,7 +9,7 @@ import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
 import { format, set } from "date-fns";
 import VideoEditSheet from "@/components/VideoDetail/VideoEditSheet";
-import { useVideoEdit } from "@/stores/useVideoEdit";
+import { useVideoInfoEdit } from "@/stores/useVideoInfoEdit";
 import { VideoDiary } from "@/types/VideoDiary";
 import { deleteVideo } from "@/services/databaseService";
 import { saveToGallery } from "@/services/videoService";
@@ -19,7 +19,7 @@ export default function VideoDetail() {
   const params = useLocalSearchParams();
   const { id, title, description, uri, width, height, createdAt } = params;
 
-  const { setSelectedVideo } = useVideoEdit();
+  const { setSelectedVideo } = useVideoInfoEdit();
   const handleSelectedVideo = () => {
     const video: VideoDiary = {
       id: id as string,
