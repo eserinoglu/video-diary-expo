@@ -86,7 +86,7 @@ export default function VideoDetail() {
         </TouchableOpacity>
       </View>
       {/* Video player */}
-      <View className="w-full rounded-3xl overflow-hidden flex items-center mt-2 justify-center h-[45%]">
+      <View className="w-full rounded-3xl overflow-hidden flex items-center mt-2 justify-center h-[50%]">
         <BlurView
           intensity={60}
           experimentalBlurMethod="dimezisBlurView"
