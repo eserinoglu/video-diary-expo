@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import { useScreenDimensions } from "@/utils/useScreenDimensions";
-import { Pressable } from "react-native";
+import { Pressable, Keyboard } from "react-native";
 
 export default function BottomSheet({
   children,
@@ -19,7 +20,22 @@ export default function BottomSheet({
 }) {
   const insets = useScreenDimensions().insets;
 
-  const sheetHeight = height + insets.bottom;
+  const keyboardHeight = useSharedValue(0);
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardWillShow", (e) => {
+      keyboardHeight.value = withTiming(e.endCoordinates.height);
+    });
+    Keyboard.addListener("keyboardWillHide", (e) => {
+      keyboardHeight.value = withTiming(0);
+    });
+    return () => {
+      Keyboard.removeAllListeners("keyboardWillShow");
+      Keyboard.removeAllListeners("keyboardWillHide");
+    };
+  }, []);
+
+  const sheetHeight = height + insets.bottom
 
   const animatedContainerStyle = useAnimatedStyle(() => {
     return {
@@ -40,7 +56,7 @@ export default function BottomSheet({
   });
   const animatedSheetStyle = useAnimatedStyle(() => {
     return {
-      height: sheetHeight,
+      height: withTiming(sheetHeight + keyboardHeight.value),
       transform: [{ translateY: withTiming(isVisible ? 0 : sheetHeight) }],
       paddingBottom: insets.bottom,
     };

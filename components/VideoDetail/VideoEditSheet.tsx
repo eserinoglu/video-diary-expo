@@ -1,5 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Keyboard,
+  KeyboardAvoidingView,
+} from "react-native";
+import React, { useEffect } from "react";
 import { useVideoDatabase } from "@/stores/useVideoDatabase";
 import i18n from "@/locales/i18n";
 import { Feather } from "@expo/vector-icons";
@@ -9,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "@/types/FormSchema";
 import TextField from "../Shared/TextField";
 import BottomSheet from "../Shared/BottomSheet";
+import { useSharedValue, withTiming } from "react-native-reanimated";
 
 export default function VideoEditSheet({
   isVisible,
@@ -38,9 +45,12 @@ export default function VideoEditSheet({
     mode: "onChange",
   });
 
+  const keyboardHeight = Keyboard.metrics()?.height || 0
+
+
   return (
     <BottomSheet
-      height={380}
+      height={360}
       dismiss={() => setIsVisible(false)}
       isVisible={isVisible}
     >
@@ -63,7 +73,10 @@ export default function VideoEditSheet({
           </TouchableOpacity>
         </View>
         {/* Form */}
-        <View className="flex-col flex-1 justify-end gap-4 w-full">
+        <KeyboardAvoidingView
+          behavior="padding"
+          className="flex-col justify-start gap-4 w-full"
+        >
           <TextField
             errors={errors}
             control={control}
@@ -77,18 +90,18 @@ export default function VideoEditSheet({
             placeholder="description"
             isDescription
           />
-          <TouchableOpacity
-            disabled={!isValid}
-            onPress={handleSubmit(onSubmit)}
-            className={`${
-              isValid ? "bg-tint" : "bg-neutral-500"
-            } rounded-3xl p-4 mt-4`}
-          >
-            <Text className="text-white text-center text-lg font-semibold">
-              {i18n.t("save")}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
+        <TouchableOpacity
+          disabled={!isValid}
+          onPress={handleSubmit(onSubmit)}
+          className={`${
+            isValid ? "bg-tint" : "bg-neutral-500"
+          } rounded-3xl p-4 mt-4`}
+        >
+          <Text className="text-white text-center text-lg font-semibold">
+            {i18n.t("save")}
+          </Text>
+        </TouchableOpacity>
       </View>
     </BottomSheet>
   );
