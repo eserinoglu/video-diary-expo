@@ -1,4 +1,5 @@
 import { FFmpegKit, ReturnCode } from "ffmpeg-kit-react-native";
+import * as MediaLibrary from "expo-media-library";
 
 const formatStartTime = (startTime: number): string => {
   const hours = Math.floor(startTime / 3600);
@@ -19,7 +20,9 @@ export const cropVideo = async (
 ): Promise<{ success: boolean; outputPath: string }> => {
   try {
     // Trim command
-    const command = `-ss ${formatStartTime(startTime)} -i ${videoUri} -t ${trimDuration} -c copy "${outputPath}"`;
+    const command = `-ss ${formatStartTime(
+      startTime
+    )} -i ${videoUri} -t ${trimDuration} -c copy "${outputPath}"`;
 
     // Execute the command
     const session = await FFmpegKit.execute(command);
@@ -34,5 +37,15 @@ export const cropVideo = async (
   } catch (error) {
     console.error("Trimming error (videoService.ts):", error);
     throw error;
+  }
+};
+
+export const saveToGallery = async (videoUri: string): Promise<boolean> => {
+  const request = await MediaLibrary.requestPermissionsAsync();
+  if (request.granted) {
+    await MediaLibrary.saveToLibraryAsync(videoUri);
+    return true;
+  } else {
+    return false;
   }
 };

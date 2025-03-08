@@ -23,5 +23,8 @@
     "max_description_warning" : "Description must be at most 100 characters long.",
     "clip_detail" : "Clip Detail",
     "save_gallery" : "Save to Gallery",
-    "edit_video" : "Edit Video"
+    "edit_video" : "Edit Video",
+    "delete_video" : "Delete Video",
+    "delete_video_desc" : "Are you sure you want to delete this video? This action cannot be undone.",
+    "delete" : "Delete"
 }

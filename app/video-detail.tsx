@@ -7,10 +7,12 @@ import { BlurView } from "expo-blur";
 import { Feather } from "@expo/vector-icons";
 import i18n from "@/locales/i18n";
 import { useColorTheme } from "@/utils/useColorTheme";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import VideoEditSheet from "@/components/VideoDetail/VideoEditSheet";
 import { useVideoEdit } from "@/stores/useVideoEdit";
 import { VideoDiary } from "@/types/VideoDiary";
+import DeleteVideo from "@/components/VideoDetail/DeleteVideoSheet";
+import { deleteVideo } from "@/services/databaseService";
 
 export default function VideoDetail() {
   const params = useLocalSearchParams();
@@ -31,6 +33,17 @@ export default function VideoDetail() {
     setSelectedVideo(video);
   };
 
+  const [isDeleting, setIsDeleting] = React.useState(false);
+  const handleDeleteVideo = async () => {
+    setIsDeleting(true);
+    await deleteVideo(id as string);
+    setIsDeleting(false);
+    setDeleteSheetVisible(false);
+    router.back();
+  };
+
+  const [deleteSheetVisible, setDeleteSheetVisible] = React.useState(false);
+
   const router = useRouter();
 
   const isDarkMode = useColorTheme().colorScheme === "dark";
@@ -39,20 +52,6 @@ export default function VideoDetail() {
 
   // Video player
   const player = useVideoPlayer(Array.isArray(uri) ? uri[0] : uri);
-
-  // Video player dimension calculation
-  const videoViewSize = (): {
-    width: number | string;
-    height: number | string;
-    aspect: number;
-  } => {
-    const aspectOfVideo = Number(width) / Number(height);
-    if (aspectOfVideo < 1) {
-      return { width: "auto", height: "100%", aspect: aspectOfVideo };
-    } else {
-      return { width: "100%", height: "auto", aspect: aspectOfVideo };
-    }
-  };
 
   return (
     <View
@@ -74,7 +73,10 @@ export default function VideoDetail() {
         <Text className="text-xl font-semibold text-text">
           {i18n.t("clip_detail")}
         </Text>
-        <TouchableOpacity className="w-[24] aspect-square">
+        <TouchableOpacity
+          onPress={() => setDeleteSheetVisible(true)}
+          className="w-[24] aspect-square"
+        >
           <Feather
             name="trash"
             size={20}
@@ -146,6 +148,13 @@ export default function VideoDetail() {
           />
         </TouchableOpacity>
       </View>
+      {/* sheets */}
+      <DeleteVideo
+        isVisible={deleteSheetVisible}
+        dismiss={() => setDeleteSheetVisible(false)}
+        handleDelete={handleDeleteVideo}
+        isDeleting={isDeleting}
+      />
       <VideoEditSheet />
     </View>
   );

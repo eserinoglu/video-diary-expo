@@ -1,5 +1,6 @@
 import * as SQLite from "expo-sqlite";
 import { VideoDiary } from "@/types/VideoDiary";
+import * as FileSystem from "expo-file-system";
 
 const db = SQLite.openDatabaseSync("videoDiary.db");
 
@@ -36,13 +37,14 @@ export const insertVideo = async (video: VideoDiary) => {
 
 export const deleteVideo = async (id: string) => {
   try {
-    await db.runAsync("DELETE FROM videos WHERE id = ?", [id]);
+    await db.runAsync("DELETE FROM videos WHERE id = ?", [id])
     console.log("Video deleted successfully");
   } catch (error) {
     console.error("Delete video error:", error);
     throw error;
   }
 };
+
 
 export const getAllVideos = async (): Promise<VideoDiary[]> => {
   try {
