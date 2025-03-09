@@ -1,4 +1,4 @@
-<img src="https://github.com/user-attachments/assets/777ff08d-1db2-4d60-8f54-b2c4093ad69c" width="200" height="200" style="border-radius:24px"/>
+<img src="https://github.com/user-attachments/assets/777ff08d-1db2-4d60-8f54-b2c4093ad69c" width="200" height="200" style='border-radius:24px'/>
 
 # Video Diary App
 
@@ -47,9 +47,10 @@ A React Native application that allows users to import, crop, and manage video c
 
 4. Run on emulator:
    ```
-   - For iOS
+   # For iOS
    npm run ios
-   - For Android
+   
+   # For Android
    npm run android
    ```
 
@@ -82,8 +83,3 @@ A React Native application that allows users to import, crop, and manage video c
 1. Access the settings menu from the main screen
 2. Select your preferred language from the available options
 3. The app interface will update to reflect your language choice
-
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
