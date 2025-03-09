@@ -32,6 +32,7 @@ A React Native application that allows users to import, crop, and manage video c
 1. Clone the repository:
    ```
    git clone https://github.com/eserinoglu/video-diary-expo.git
+   cd video-diary-expo
    ```
 
 2. Install dependencies:
