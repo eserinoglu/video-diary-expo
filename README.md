@@ -32,7 +32,6 @@ A React Native application that allows users to import, crop, and manage video c
 1. Clone the repository:
    ```
    git clone https://github.com/eserinoglu/video-diary-expo.git
-   cd video-diary-expo
    ```
 
 2. Install dependencies:
@@ -40,14 +39,19 @@ A React Native application that allows users to import, crop, and manage video c
    npm install
    ```
    
-3. Start the Expo development server:
+3. This app includes native modules so it requires build.
    ```
-   npx expo start
+   npx expo prebuild
    ```
 
-4. Run on your device or emulator:
-   - Scan the QR code with the Expo Go app (Android) or Camera app (iOS)
-   - Press 'a' for Android emulator or 'i' for iOS simulator
+4. Run on emulator:
+   ```
+   - For iOS
+   npm run ios
+   - For Android
+   npm run android
+   ```
+
 
 ## Usage Guide
 
