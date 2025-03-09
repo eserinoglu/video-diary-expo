@@ -192,9 +192,6 @@ function TimelineView() {
     }
   };
 
-  const blurhash =
-    "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
-
   return (
     <View className="w-full flex flex-col gap-4">
       {/* Video start and end times text */}
@@ -233,7 +230,6 @@ function TimelineView() {
               key={index}
               source={thumbnail}
               style={{ width: thumbnailWidth, height: "100%" }}
-              placeholder={{ blurhash }}
             />
           ))}
         </ScrollView>
