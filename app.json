@@ -11,14 +11,18 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.eserinoglu.VideoDiary",
+      "icon" : {
+        "dark" : "./assets/images/icon-dark.png",
+        "light" : "./assets/images/icon.png"
+      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/android-adaptive-icon.png",
+        "backgroundColor": "#12A8F9"
       },
       "package": "com.eserinoglu.VideoDiary"
     },
@@ -33,9 +37,13 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 20,
+          "imageWidth": 120,
           "resizeMode": "contain",
-          "backgroundColor": "#000000"
+          "backgroundColor": "#ffffff",
+          "dark": {
+              "image" : "./assets/images/splash-icon.png",
+              "backgroundColor" : "#000000"
+          }
         }
       ],
       [
