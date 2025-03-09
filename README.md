@@ -1,50 +1,84 @@
-# Welcome to your Expo app 👋
+<img src="https://github.com/user-attachments/assets/777ff08d-1db2-4d60-8f54-b2c4093ad69c" width="200" height="200" style="border-radius:24px"/>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Video Diary App
 
-## Get started
+A React Native application that allows users to import, crop, and manage video clips with associated metadata.
 
-1. Install dependencies
 
-   ```bash
+- **Video Import**: Select videos from your device gallery
+- **Video Trimming**: Crop specific segments (5 or 10 seconds) from imported videos
+- **Metadata Management**: Add and edit details such as name and description for each video
+- **Video List**: Browse through previously cropped videos
+- **Details View**: View saved videos with their associated metadata
+- **Persistent Storage**: SQLite database integration for reliable data storage
+- **Save to Gallery**: Export cropped videos to your device gallery
+- **Localization**: Multi-language support for international users
+
+## Tech Stack
+
+- **Expo**: Base framework for React Native development
+- **Expo Router**: Navigation implementation
+- **Zustand**: State management
+- **Tanstack Query**: Async logic and FFMPEG process management
+- **FFMPEG**: Video processing library
+- **NativeWind**: Styling solution
+- **Expo Video**: Video rendering and playback
+- **Expo SQLite**: Structured, persistent storage
+- **React Native Reanimated**: Smooth animations
+- **Zod/Yup**: Form validation
+
+## Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/eserinoglu/video-diary-expo.git
+   cd video-diary-app
+   ```
+
+2. Install dependencies:
+   ```
    npm install
    ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
+   
+3. Start the Expo development server:
+   ```
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on your device or emulator:
+   - Scan the QR code with the Expo Go app (Android) or Camera app (iOS)
+   - Press 'a' for Android emulator or 'i' for iOS simulator
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Usage Guide
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Importing and Trimming a Video
 
-## Get a fresh project
+1. From the main screen, tap the "New Diary" button to add a new video
+2. Select a video from your device gallery
+3. Use the scrubber to select the segment you want to trim
+4. Choose the duration (5 or 10 seconds) for your clip
+5. Tap "Next" to proceed to metadata entry
 
-When you're ready, run:
+### Adding Metadata
 
-```bash
-npm run reset-project
-```
+1. Enter a name for your video clip
+2. Add a description with additional details
+3. Tap "Save" to process and store the video
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Managing Your Video Library
 
-## Learn more
+1. The main screen displays all your saved videos
+2. Tap on any video to view its details
+3. Use the edit button to modify the video's metadata
+4. You can save any video to your device gallery using the export option
 
-To learn more about developing your project with Expo, look at the following resources:
+### Changing Language
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Access the settings menu from the main screen
+2. Select your preferred language from the available options
+3. The app interface will update to reflect your language choice
 
-## Join the community
 
-Join our community of developers creating universal apps.
+## License
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is licensed under the MIT License - see the LICENSE file for details.
