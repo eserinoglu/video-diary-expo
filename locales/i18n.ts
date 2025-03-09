@@ -28,10 +28,8 @@ export const loadSavedLanguage = async () => {
   try {
     const savedLanguage = await AsyncStorage.getItem("appLanguage");
 
-    // Eğer kayıtlı dil varsa onu kullan, yoksa cihaz dilini al
     const language = savedLanguage || Localization.locale.split("-")[0];
 
-    // Desteklenen diller içinde mi kontrol et
     const finalLanguage = Object.keys(resources).includes(language)
       ? language
       : "en";
